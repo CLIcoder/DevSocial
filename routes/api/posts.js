@@ -1,7 +1,11 @@
-const express = require("express");
+import { Router } from "express";
 
-const route = express.Router();
+const route = Router();
 
-route.get("/test", (req, res) => res.json({ test: "post route" }));
+route.get("/test", (req, res) =>
+  res.json({
+    test: "post route",
+  })
+);
 
-module.exports = route;
+export default route;

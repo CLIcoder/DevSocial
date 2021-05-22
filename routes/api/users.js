@@ -1,7 +1,11 @@
-const express = require("express");
+import { Router } from "express";
+import schemaValidation from "../../model/Users/validation.js";
+const route = Router();
 
-const route = express.Router();
+route.post("/register", (req, res) => {
+  // validating the incoming request
+  console.log(req.body.name);
+  res.end();
+});
 
-route.get("/test", (req, res) => res.json({ test: "user route" }));
-
-module.exports = route;
+export default route;
