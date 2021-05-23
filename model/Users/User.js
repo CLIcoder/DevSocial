@@ -1,5 +1,6 @@
-import { model, Schema } from "mongoose";
-import { imgDefault } from "../../config/keys";
+import mongoose from "mongoose";
+import { imgDefault } from "../../config/images.js";
+const { model, Schema } = mongoose;
 
 // creating a schema for the User model
 const schemaDb = new Schema({

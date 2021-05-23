@@ -1,5 +1,6 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+//in case I wanna use require module
+//import { createRequire } from "module";
+//const require = createRequire(import.meta.url);
 import express from "express";
 import posts from "./routes/api/posts.js";
 import profile from "./routes/api/profile.js";
@@ -16,10 +17,7 @@ app.use("/api/profile", profile);
 
 // you should use your own URI for mongodb connection
 mongoose
-  .connect(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(URI)
   .then(() => console.log("connected"))
   .catch((err) => console.log(err));
 
