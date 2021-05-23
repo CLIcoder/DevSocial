@@ -1,8 +1,10 @@
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 
 import schemaValidation from "../../model/Users/validation.js";
 import bcrypt from "bcrypt";
 import User from "../../model/Users/User.js";
+import { JWT_KEY } from "../../config/keys.js";
 const route = Router();
 
 // register route
@@ -42,7 +44,9 @@ route.post("/login", (req, res) => {
       //check the password match the email in case email is found
       bcrypt.compare(req.body.password, result.password).then((val) => {
         if (!val) return res.status(404).send("password incorrect");
-        res.status(200).send("logged in succefully");
+        //... creating the jwt token
+        const token = jwt.sign({ ...result }, JWT_KEY);
+        return res.json({ tokens: token });
       });
     })
     .catch((err) => res.status(404).send(`Error in bcrypt: ${err}`));

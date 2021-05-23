@@ -7,6 +7,7 @@ import profile from "./routes/api/profile.js";
 import users from "./routes/api/users.js";
 import { URI } from "./config/keys.js";
 import mongoose from "mongoose";
+import authenticateToken from "./middlwares/auth-token.js";
 
 const app = express();
 
@@ -24,6 +25,11 @@ mongoose
 
 // port setup
 const port = process.env.PORT || 5000;
+
+//testing a private route
+app.get("/admin", authenticateToken, (req, res) => {
+  res.json(req.user);
+});
 
 //app listen connection stream
 app.listen(port, () => console.log(`server running at port ${port}`));
