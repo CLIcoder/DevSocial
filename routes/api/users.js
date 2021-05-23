@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import User from "../../model/Users/User.js";
 const route = Router();
 
+// register route
 route.post("/register", (req, res) => {
   bcrypt.hash(req.body.password, 10, async (err, hash) => {
     try {
@@ -24,11 +25,27 @@ route.post("/register", (req, res) => {
 
       //storing result in db
       await result.save();
-      res.send("data saved to db (users collection)");
+      res.status(200).send("data saved to db (users collection)");
     } catch (err) {
       res.status(404).send(`${err}`);
     }
   });
+});
+
+//login route
+route.post("/login", (req, res) => {
+  // check if the email is found
+  User.findOne({ email: req.body.email })
+    .then((result) => {
+      if (!result) return res.status(404).send("email not found");
+
+      //check the password match the email in case email is found
+      bcrypt.compare(req.body.password, result.password).then((val) => {
+        if (!val) return res.status(404).send("password incorrect");
+        res.status(200).send("logged in succefully");
+      });
+    })
+    .catch((err) => res.status(404).send(`Error in bcrypt: ${err}`));
 });
 
 export default route;
