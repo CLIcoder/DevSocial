@@ -16,6 +16,9 @@ route.post("/register", (req, res) => {
         throw new Error(
           `😞your data is not valid😞 ${schemaValidation(req.body)}`
         );
+      await User.findOne({ email: req.body.email }).then((result) => {
+        if (result) throw new Error("email already exist try to connect");
+      });
       // *** 👆  chekcing for error while hashing and validating data  👆***
 
       //saving result in the database 🗃️
