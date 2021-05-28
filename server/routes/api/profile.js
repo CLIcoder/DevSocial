@@ -1,7 +1,9 @@
 import { request, Router } from "express";
 
 import authenticateToken from "../../middlwares/auth-token.js";
-import schemaValidation from "../../model/Profile/validation.js";
+import schemaValidation, {
+  schemaValidation_exp,
+} from "../../model/Profile/validation.js";
 import Profile from "../../model/Profile/Profile.js";
 
 const route = Router();
@@ -36,6 +38,36 @@ route.post("/", authenticateToken, async (req, res) => {
     });
 
     // create new profile for the logged in user
+  } catch (err) {
+    res.status(404).send(`${err}`);
+  }
+});
+
+// @route   POST api/profile/experience
+// @desc    Add experience to profile
+// @access  Private
+
+route.post("/experience", authenticateToken, async (req, res) => {
+  try {
+    //validate experience data
+    const request = req.body;
+    if (schemaValidation_exp(request)) {
+      throw new Error(
+        `😞Your data is not valid😞 ${schemaValidation_exp(request)} `
+      );
+    }
+    // collect the data from mongodb
+    await Profile.findOne({ user: req.user._doc._id }).then((profile) => {
+      const newExperience = [...profile.experience, request];
+      Profile.findOneAndUpdate(
+        { user: req.user._doc._id },
+        { $set: { experience: newExperience } }
+      )
+        .then((profile) => res.json(profile))
+        .catch((err) => {
+          throw err;
+        });
+    });
   } catch (err) {
     res.status(404).send(`${err}`);
   }

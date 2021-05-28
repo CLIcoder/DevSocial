@@ -22,4 +22,18 @@ const schemaValidation = (objectVal) => {
   return error;
 };
 
+export const schemaValidation_exp = (objectVal) => {
+  const schema = Joi.object({
+    title: Joi.string().min(2).max(40).required(),
+    company: Joi.string().min(2).max(40).required(),
+    location: Joi.string().min(2).max(1000),
+    from: Joi.string().min(2).max(100).required(),
+    to: Joi.date().min(2).max(100),
+    current: Joi.boolean(),
+    description: Joi.string().min(2).max(10000),
+  });
+  const { error } = schema.validate(objectVal);
+  return error;
+};
+
 export default schemaValidation;
