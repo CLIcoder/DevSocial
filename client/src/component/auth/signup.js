@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+import { signUpValidation } from "../../utils/formValidation";
 
 const SignUp = () => {
   const [field, setField] = useState({
@@ -7,14 +10,28 @@ const SignUp = () => {
     password: "",
     password2: "",
   });
+  const [error, setError] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setField({ ...field, [name]: value });
   };
-  const submitData = (e) => {
+  const submitData = async (e) => {
     e.preventDefault();
     //final submit data
-    console.log(field);
+    const dataError = signUpValidation(field);
+    if (!dataError) {
+      const { password2, ...valideData } = field;
+      console.log(JSON.stringify(valideData));
+      await axios
+        .post("http://localhost:5000/api/users/singUp", { ...valideData })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
+    setError({ ...dataError });
   };
   return (
     <div className="register">
@@ -33,7 +50,9 @@ const SignUp = () => {
                   onChange={handleChange}
                   value={field.name}
                 />
+                <div style={{ color: "red" }}>{error.name}</div>
               </div>
+
               <div className="form-group">
                 <input
                   type="email"
@@ -43,6 +62,7 @@ const SignUp = () => {
                   onChange={handleChange}
                   value={field.email}
                 />
+                <div style={{ color: "red" }}>{error.email}</div>
                 <small className="form-text text-muted">
                   This site uses Gravatar so if you want a profile image, use a
                   Gravatar email
@@ -57,6 +77,7 @@ const SignUp = () => {
                   onChange={handleChange}
                   value={field.password}
                 />
+                <div style={{ color: "red" }}>{error.password}</div>
               </div>
               <div className="form-group">
                 <input
@@ -67,6 +88,7 @@ const SignUp = () => {
                   onChange={handleChange}
                   value={field.password2}
                 />
+                <div style={{ color: "red" }}>{error.password}</div>
               </div>
               <input type="submit" className="btn btn-info btn-block mt-4" />
             </form>

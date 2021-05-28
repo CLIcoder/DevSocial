@@ -8,7 +8,8 @@ import { JWT_KEY } from "../../config/keys.js";
 const route = Router();
 
 // register route
-route.post("/register", (req, res) => {
+route.post("/singUp", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   bcrypt.hash(req.body.password, 10, async (err, hash) => {
     try {
       if (err) throw new Error(`😞error while hashing the password😞 ${err}`);
@@ -38,7 +39,7 @@ route.post("/register", (req, res) => {
 });
 
 //login route
-route.post("/login", (req, res) => {
+route.post("/signIn", (req, res) => {
   // check if the email is found
   User.findOne({ email: req.body.email })
     .then((result) => {

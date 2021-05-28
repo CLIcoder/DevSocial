@@ -8,11 +8,13 @@ import users from "./routes/api/users.js";
 import { URI } from "./config/keys.js";
 import mongoose from "mongoose";
 import authenticateToken from "./middlwares/auth-token.js";
+import cors from "cors";
 
 const app = express();
 
 //midllwares
 app.use(express.json());
+app.use(cors());
 app.use("/api/posts", posts);
 app.use("/api/users", users);
 app.use("/api/profile", profile);
