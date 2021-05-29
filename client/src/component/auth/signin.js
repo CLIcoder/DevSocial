@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+import { signInValidation } from "../../utils/formValidation";
 
 const SignIn = () => {
   const [field, setFiled] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState({
     email: "",
     password: "",
   });
@@ -9,9 +16,17 @@ const SignIn = () => {
     const { name, value } = e.target;
     setFiled({ ...field, [name]: value });
   };
-  const submitData = (e) => {
+  const submitData = async (e) => {
     e.preventDefault();
-    console.log(field);
+    const dataError = signInValidation(field);
+    if (!dataError) {
+      //... connecting to my rest api
+      await axios
+        .post("http://localhost:5000/api/users/signIn", { ...field })
+        .then((res) => console.log(res.data))
+        .catch((err) => console.log(err));
+    }
+    setError({ ...dataError });
   };
   return (
     <div className="login">
@@ -32,6 +47,7 @@ const SignIn = () => {
                   value={field.email}
                   onChange={handleChange}
                 />
+                <div style={{ color: "red" }}>{error.email}</div>
               </div>
               <div className="form-group">
                 <input
@@ -42,6 +58,7 @@ const SignIn = () => {
                   value={field.password}
                   onChange={handleChange}
                 />
+                <div style={{ color: "red" }}>{error.password}</div>
               </div>
               <input type="submit" className="btn btn-info btn-block mt-4" />
             </form>

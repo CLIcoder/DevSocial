@@ -1,8 +1,7 @@
 import React from "react";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Main = () => {
-  const history = useHistory();
   return (
     <div className="landing">
       <div className="dark-overlay landing-inner text-light">
@@ -15,16 +14,11 @@ const Main = () => {
                 from other developers
               </p>
               <hr />
-              <Link
-                className="btn btn-lg btn-info mr-2"
-                onClick={() => history.push("/signup")}
-              >
+
+              <Link className="btn btn-lg btn-info mr-2" to="/signUp">
                 Sign Up
               </Link>
-              <Link
-                className="btn btn-lg btn-light"
-                onClick={() => history.push("/signin")}
-              >
+              <Link className="btn btn-lg btn-light" to="/signIn">
                 Sign In
               </Link>
             </div>
