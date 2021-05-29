@@ -23,7 +23,9 @@ const SignIn = () => {
       //... connecting to my rest api
       await axios
         .post("http://localhost:5000/api/users/signIn", { ...field })
-        .then((res) => console.log(res.data))
+        .then((res) =>
+          window.localStorage.setItem("authorisation", res.data.tokens)
+        )
         .catch((err) => console.log(err));
     }
     setError({ ...dataError });

@@ -8,6 +8,12 @@ import Profile from "../../model/Profile/Profile.js";
 
 const route = Router();
 
+// testing route for react server
+
+route.get("/", authenticateToken, (req, res) => {
+  res.send("you're authorized to access this route");
+});
+
 // @route   POST api/profile
 // @desc    Create or edit user profile
 // @access  Private
