@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 import { signUpValidation } from "../../utils/formValidation";
 
 const SignUp = () => {
+  // setting up the state
+  const history = useHistory();
   const [field, setField] = useState({
     name: "",
     email: "",
@@ -15,24 +18,28 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setField({ ...field, [name]: value });
   };
+
   const submitData = async (e) => {
     e.preventDefault();
-    //final submit data
+
     const dataError = signUpValidation(field);
-    if (!dataError) {
-      const { password2, ...valideData } = field;
-      console.log(JSON.stringify(valideData));
-      await axios
-        .post("http://localhost:5000/api/users/singUp", { ...valideData })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    }
-    setError({ ...dataError });
+    if (!dataError) setError({ ...dataError });
+
+    //login the user after signUp
+    const { password2, ...valideData } = field;
+    await axios
+      .post("http://localhost:5000/api/users/singUp", { ...valideData })
+      .then((res) => {
+        //...login the new user + //... update context with a new user for other props to consume using utils/getUserInfo && context/userContext)
+      })
+      .catch((err) => console.log(err));
   };
+
   return (
     <div className="register">
       <div className="container">

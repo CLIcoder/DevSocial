@@ -1,3 +1,4 @@
+//validation for signUp
 export const signUpValidation = ({ name, email, password, password2 }) => {
   const error = {
     name: "",
@@ -15,6 +16,7 @@ export const signUpValidation = ({ name, email, password, password2 }) => {
   return error;
 };
 
+//validation for signIn
 export const signInValidation = ({ email, password }) => {
   const error = {
     email: "",

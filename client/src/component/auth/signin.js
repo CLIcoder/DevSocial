@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 import { signInValidation } from "../../utils/formValidation";
+import { userContext } from "../../context/userContext";
 
 const SignIn = () => {
+  const [_, setUser] = useContext(userContext);
+  const history = useHistory();
   const [field, setFiled] = useState({
     email: "",
     password: "",
@@ -12,24 +16,31 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFiled({ ...field, [name]: value });
   };
+
   const submitData = async (e) => {
     e.preventDefault();
     const dataError = signInValidation(field);
-    if (!dataError) {
-      //... connecting to my rest api
-      await axios
-        .post("http://localhost:5000/api/users/signIn", { ...field })
-        .then((res) =>
-          window.localStorage.setItem("authorisation", res.data.tokens)
-        )
-        .catch((err) => console.log(err));
-    }
-    setError({ ...dataError });
+
+    // checking if no error is seen while registring user
+    if (!dataError) setError({ ...dataError });
+
+    //login the user after signIn
+    await axios
+      .post("http://localhost:5000/api/users/signIn", { ...field })
+      .then((res) => {
+        window.localStorage.setItem("authorisation", res.data.tokens);
+        //... update context with a new user for other props to consume using utils/getUserInfo && context/userContext
+      })
+      .catch((err) => {
+        //... pushing new error data into error state
+      });
   };
+
   return (
     <div className="login">
       <div className="container">
