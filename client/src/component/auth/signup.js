@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import jsonwebtoken from "jsonwebtoken";
 
 import { signUpValidation } from "../../utils/formValidation";
+import { userContext } from "../../context/userContext";
 
 const SignUp = () => {
   // setting up the state
+  const [, setUser] = useContext(userContext);
   const history = useHistory();
   const [field, setField] = useState({
     name: "",
@@ -28,16 +31,29 @@ const SignUp = () => {
     e.preventDefault();
 
     const dataError = signUpValidation(field);
-    if (!dataError) setError({ ...dataError });
-
-    //login the user after signUp
-    const { password2, ...valideData } = field;
-    await axios
-      .post("http://localhost:5000/api/users/singUp", { ...valideData })
-      .then((res) => {
-        //...login the new user + //... update context with a new user for other props to consume using utils/getUserInfo && context/userContext)
-      })
-      .catch((err) => console.log(err));
+    if (dataError) return setError({ ...dataError });
+    else {
+      //login the user after signUp
+      const { password2, ...valideData } = field;
+      // register user
+      await axios
+        .post("http://localhost:5000/api/users/signup", { ...valideData })
+        .then(async (res) => {
+          // login the user
+          await axios
+            .post("http://localhost:5000/api/users/signin", { ...res.data })
+            .then((res) => {
+              window.localStorage.setItem("authorisation", res.data.tokens);
+              const data = jsonwebtoken.verify(
+                res.data.tokens,
+                "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW"
+              );
+              setUser({ ...data });
+              history.push("/welcome");
+            });
+        })
+        .catch((err) => console.log(`${err}`));
+    }
   };
 
   return (

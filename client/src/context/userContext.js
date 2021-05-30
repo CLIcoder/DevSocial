@@ -8,6 +8,8 @@ export const UserProvider = (props) => {
     name: "",
     email: "",
     avatar: "",
+    date: "",
+    iat: "",
   });
 
   return (

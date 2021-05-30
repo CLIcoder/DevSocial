@@ -8,7 +8,8 @@ import { JWT_KEY } from "../../config/keys.js";
 const route = Router();
 
 // register route
-route.post("/singUp", (req, res) => {
+
+route.post("/signup", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   bcrypt.hash(req.body.password, 10, async (err, hash) => {
     try {
@@ -28,10 +29,12 @@ route.post("/singUp", (req, res) => {
         email: req.body.email,
         password: hash,
       });
-
       //storing result in db
+
       await result.save();
-      res.status(200).send("data saved to db (users collection)");
+      res
+        .status(200)
+        .json({ email: req.body.email, password: req.body.password });
     } catch (err) {
       res.status(404).send(`${err}`);
     }
@@ -39,7 +42,7 @@ route.post("/singUp", (req, res) => {
 });
 
 //login route
-route.post("/signIn", (req, res) => {
+route.post("/signin", (req, res) => {
   // check if the email is found
   User.findOne({ email: req.body.email })
     .then((result) => {
@@ -48,9 +51,11 @@ route.post("/signIn", (req, res) => {
       //check the password match the email in case email is found
       bcrypt.compare(req.body.password, result.password).then((val) => {
         if (!val) return res.status(404).send("password incorrect");
+        const { name, email, avatar, date } = result;
+
         //... creating the jwt token
-        const token = jwt.sign({ ...result }, JWT_KEY);
-        return res.json({ tokens: token });
+        const token = jwt.sign({ name, email, avatar, date }, JWT_KEY);
+        return res.json({ tokens: token, name, email, avatar, date });
       });
     })
     .catch((err) => res.status(404).send(`Error in bcrypt: ${err}`));

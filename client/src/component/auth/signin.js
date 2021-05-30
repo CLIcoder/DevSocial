@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import jsonwebtoken from "jsonwebtoken";
 
 import { signInValidation } from "../../utils/formValidation";
 import { userContext } from "../../context/userContext";
 
 const SignIn = () => {
-  const [_, setUser] = useContext(userContext);
+  const [, setUser] = useContext(userContext);
   const history = useHistory();
   const [field, setFiled] = useState({
     email: "",
@@ -27,18 +28,25 @@ const SignIn = () => {
     const dataError = signInValidation(field);
 
     // checking if no error is seen while registring user
-    if (!dataError) setError({ ...dataError });
-
-    //login the user after signIn
-    await axios
-      .post("http://localhost:5000/api/users/signIn", { ...field })
-      .then((res) => {
-        window.localStorage.setItem("authorisation", res.data.tokens);
-        //... update context with a new user for other props to consume using utils/getUserInfo && context/userContext
-      })
-      .catch((err) => {
-        //... pushing new error data into error state
-      });
+    if (dataError) setError({ ...dataError });
+    else {
+      //login the user after signIn
+      await axios
+        .post("http://localhost:5000/api/users/signin", { ...field })
+        .then((res) => {
+          window.localStorage.setItem("authorisation", res.data.tokens);
+          const data = jsonwebtoken.verify(
+            res.data.tokens,
+            "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW"
+          );
+          setUser({ ...data });
+          history.push("/welcome");
+        })
+        .catch(() => {
+          //... pushing new error data into error state
+          setError({ email: "", password: "password or email incorrect" });
+        });
+    }
   };
 
   return (
