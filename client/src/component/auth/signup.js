@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import jsonwebtoken from "jsonwebtoken";
@@ -21,6 +21,14 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+
+  const redirect = () => {
+    if (window.localStorage.getItem("authorisation")) {
+      history.push("/dashboard");
+    }
+  };
+
+  useEffect(redirect, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +57,7 @@ const SignUp = () => {
                 "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW"
               );
               setUser({ ...data });
-              history.push("/welcome");
+              history.push("/dashboard");
             });
         })
         .catch((err) => console.log(`${err}`));

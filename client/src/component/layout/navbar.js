@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { userContext } from "../../context/userContext";
 
 const Navbar = () => {
+  const [user] = useContext(userContext);
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
@@ -25,18 +27,57 @@ const Navbar = () => {
               </Link>
             </li>
           </ul>
-
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="signUp">
-                Sign Up
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="signIn">
-                sign In
-              </Link>
-            </li>
+            {window.localStorage.getItem("authorisation") ? (
+              <>
+                <li className="nav-item">
+                  <button
+                    style={{
+                      cursor: "pointer",
+                      position: "absolute",
+                      backgroundColor: "transparent",
+                      color: "black",
+                      border: "none",
+                      marginLeft: "80px",
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => {
+                      window.localStorage.removeItem("authorisation");
+                      window.location.reload();
+                    }}
+                    className="nav-link"
+                  >
+                    {" "}
+                    Logout
+                  </button>
+                  <img
+                    className="rounded-circle"
+                    style={{
+                      width: "60px",
+                      height: "50px",
+                      marginRight: "20px",
+                    }}
+                    src={user.avatar}
+                    alt={user.name}
+                    title="You must have a Gravatar connected to your email to display an image"
+                  />
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="signUp">
+                    Sign Up
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="signIn">
+                    sign In
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

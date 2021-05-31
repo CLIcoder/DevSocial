@@ -4,8 +4,13 @@ import { UserProvider } from "./context/userContext";
 
 import SignIn from "./component/auth/signin";
 import SignUp from "./component/auth/signup";
+import Navbar from "./component/layout/navbar";
+import Footer from "./component/layout/footer";
+import Dashboard from "./component/profile/Dashbord";
+import PrivateRoute from "./utils/privateRoute";
+import CreateProfile from "./component/profile/createProfile";
+
 import Home from "./pages/home";
-import LoginOnly from "./component/loginOnly";
 
 import "./App.css";
 
@@ -13,10 +18,13 @@ const App = () => {
   return (
     <UserProvider>
       <BrowserRouter>
-        <Route exact path="/" component={Home} />
+        <Navbar />
+        <Route path="/" component={Home} />
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/signin" component={SignIn} />
-        <Route path="/welcome" component={LoginOnly} />
+        <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+        <PrivateRoute exact path="/Dashboard" component={Dashboard} />
+        <Footer />
       </BrowserRouter>
     </UserProvider>
   );
