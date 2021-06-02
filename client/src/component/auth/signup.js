@@ -1,15 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
-import jsonwebtoken from "jsonwebtoken";
 
 import { signUpValidation } from "../../utils/formValidation";
-import { userContext } from "../../context/userContext";
 
 const SignUp = () => {
   // setting up the state
-  const [, setUser] = useContext(userContext);
-  const history = useHistory();
   const [field, setField] = useState({
     name: "",
     email: "",
@@ -22,14 +17,6 @@ const SignUp = () => {
     password: "",
   });
 
-  const redirect = () => {
-    if (window.localStorage.getItem("authorisation")) {
-      history.push("/dashboard");
-    }
-  };
-
-  useEffect(redirect, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setField({ ...field, [name]: value });
@@ -39,7 +26,7 @@ const SignUp = () => {
     e.preventDefault();
 
     const dataError = signUpValidation(field);
-    if (dataError) return setError({ ...dataError });
+    if (dataError) return setError({ ...error, ...dataError });
     else {
       //login the user after signUp
       const { password2, ...valideData } = field;
@@ -51,16 +38,13 @@ const SignUp = () => {
           await axios
             .post("http://localhost:5000/api/users/signin", { ...res.data })
             .then((res) => {
+              // logging the user then redirecting to dashboard page
               window.localStorage.setItem("authorisation", res.data.tokens);
-              const data = jsonwebtoken.verify(
-                res.data.tokens,
-                "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW"
-              );
-              setUser({ ...data });
-              history.push("/dashboard");
+              window.location.reload();
             });
         })
-        .catch((err) => console.log(`${err}`));
+        // handling if the email exist error
+        .catch((err) => setError({ ...error, ...err.response.data }));
     }
   };
 

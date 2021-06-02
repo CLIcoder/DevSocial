@@ -30,39 +30,38 @@ const Navbar = () => {
           <ul className="navbar-nav ml-auto">
             {window.localStorage.getItem("authorisation") ? (
               <>
-                <li className="nav-item">
-                  <button
-                    style={{
-                      cursor: "pointer",
-                      position: "absolute",
-                      backgroundColor: "transparent",
-                      color: "black",
-                      border: "none",
-                      marginLeft: "80px",
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                    }}
-                    onClick={() => {
-                      window.localStorage.removeItem("authorisation");
-                      window.location.reload();
-                    }}
-                    className="nav-link"
-                  >
-                    {" "}
-                    Logout
-                  </button>
-                  <img
-                    className="rounded-circle"
-                    style={{
-                      width: "60px",
-                      height: "50px",
-                      marginRight: "20px",
-                    }}
-                    src={user.avatar}
-                    alt={user.name}
-                    title="You must have a Gravatar connected to your email to display an image"
-                  />
-                </li>
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  style={{
+                    position: "absolute",
+                    cursor: "pointer",
+                    backgroundColor: "transparent",
+                    color: "gray",
+                    border: "none",
+                    marginLeft: "80px",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => {
+                    window.localStorage.removeItem("authorisation");
+                    window.location.reload();
+                  }}
+                  className="nav-link"
+                >
+                  Logout
+                </button>
+                <img
+                  className="rounded-circle"
+                  style={{
+                    width: "60px",
+                    height: "50px",
+                    marginRight: "20px",
+                  }}
+                  src={user.avatar}
+                  alt={user.name}
+                  title="You must have a Gravatar connected to your email to display an image"
+                />
               </>
             ) : (
               <>

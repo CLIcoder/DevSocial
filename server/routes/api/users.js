@@ -19,7 +19,8 @@ route.post("/signup", (req, res) => {
           `😞your data is not valid😞 ${schemaValidation(req.body)}`
         );
       await User.findOne({ email: req.body.email }).then((result) => {
-        if (result) throw new Error("email already exist try to connect");
+        // handling if the email exist error
+        if (result) throw { email: "email already exist" };
       });
       // *** 👆  chekcing for error while hashing and validating data  👆***
 
@@ -36,7 +37,7 @@ route.post("/signup", (req, res) => {
         .status(200)
         .json({ email: req.body.email, password: req.body.password });
     } catch (err) {
-      res.status(404).send(`${err}`);
+      res.status(400).json(err);
     }
   });
 });

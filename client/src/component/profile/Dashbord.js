@@ -3,7 +3,7 @@ import { userContext } from "../../context/userContext";
 
 const Dashboard = () => {
   const [user] = useContext(userContext);
-  console.log(user, "logging the user");
+  //rerender the page
   return (
     <>
       <h1> welcome {user.name} </h1>

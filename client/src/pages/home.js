@@ -1,13 +1,7 @@
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import Main from "../component/layout/main";
 
 const Home = () => {
-  const history = useHistory();
-  useEffect(() => {
-    if (window.localStorage.getItem("authorisation"))
-      history.push("/dashboard");
-  }, []);
   return (
     <>
       <Main />

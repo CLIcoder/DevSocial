@@ -1,4 +1,11 @@
 import ReactDOM from "react-dom";
+import { UserProvider } from "./context/userContext";
 import App from "./App";
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+// provider user into the level app
+ReactDOM.render(
+  <UserProvider>
+    <App />
+  </UserProvider>,
+  document.querySelector("#root")
+);

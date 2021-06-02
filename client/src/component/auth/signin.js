@@ -1,14 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
-import jsonwebtoken from "jsonwebtoken";
 
 import { signInValidation } from "../../utils/formValidation";
-import { userContext } from "../../context/userContext";
 
 const SignIn = () => {
-  const [, setUser] = useContext(userContext);
-  const history = useHistory();
   const [field, setFiled] = useState({
     email: "",
     password: "",
@@ -17,12 +12,6 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const redirect = () => {
-    if (window.localStorage.getItem("authorisation")) {
-      history.push("/dashboard");
-    }
-  };
-  useEffect(redirect, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,13 +29,9 @@ const SignIn = () => {
       await axios
         .post("http://localhost:5000/api/users/signin", { ...field })
         .then((res) => {
+          // logging the user then redirecting to dashboard page
           window.localStorage.setItem("authorisation", res.data.tokens);
-          const data = jsonwebtoken.verify(
-            res.data.tokens,
-            "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW"
-          );
-          setUser({ ...data });
-          history.push("/dashboard");
+          window.location.reload();
         })
         .catch(() => {
           //... pushing new error data into error state
