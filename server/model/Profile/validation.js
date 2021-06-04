@@ -4,7 +4,7 @@ import Joi from "joi";
 const schemaValidation = (objectVal) => {
   const schema = Joi.object({
     //... validation the post rquest for mongodb database
-    handle: Joi.string().min(2).max(40).required(),
+    username: Joi.string().min(2).max(40).required(),
     company: Joi.string().min(2).max(40),
     website: Joi.string().uri().max(1000),
     location: Joi.string().min(2).max(1000),
