@@ -32,7 +32,6 @@ const Navbar = () => {
               <>
                 <button
                   type="button"
-                  class="btn btn-success"
                   style={{
                     position: "absolute",
                     cursor: "pointer",

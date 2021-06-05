@@ -26,11 +26,19 @@ const App = () => {
     if (!window.localStorage.getItem("authorisation")) return;
 
     //Persist the data comming from the api using useffect hook
-    const data = jsonwebtoken.verify(
+    jsonwebtoken.verify(
       window.localStorage.getItem("authorisation"),
-      "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW"
+      "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW",
+      (err, decoded) => {
+        // secure jwt and don't allow user to provide invalide token in localStorage
+        if (err) {
+          window.localStorage.removeItem("authorisation");
+          window.location.reload();
+          return;
+        }
+        setUser({ ...decoded });
+      }
     );
-    setUser({ ...data });
   };
 
   useEffect(logginIn, [setUser]);
