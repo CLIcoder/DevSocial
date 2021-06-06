@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ButtonRemove from "../button-remove/button-remove.component";
 
 const CreateProfile = () => {
   const [skills, setSkills] = useState([]);
@@ -13,9 +14,29 @@ const CreateProfile = () => {
     github: "",
   });
 
+  const removeSkill = (value) => {
+    if (skills.length === 1) setSkills([]);
+    else {
+      const newSkills = skills.filter((item) => item !== value);
+      setSkills([...newSkills]);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "skills" && value[value.length - 1] === " ") {
+    if (
+      name === "skills" &&
+      value[value.length - 1] === " " &&
+      value.length > 1
+    ) {
+      if (value.length > 15) {
+        alert("stop spamming skills");
+        return;
+      }
+      if (skills.length > 14) {
+        alert("you've reach your skills limit");
+        return;
+      }
       setSkills((oldArray) => [...oldArray, value.slice(0, -1)]);
       e.target.value = "";
     }
@@ -24,9 +45,7 @@ const CreateProfile = () => {
 
   const submitData = (e) => {
     e.preventDefault();
-    {
-      /** TODOO : send data to the backend server */
-    }
+    //...pushing data to server TODOO
   };
   return (
     <div className="login">
@@ -121,8 +140,14 @@ const CreateProfile = () => {
                   Please use space separated values (eg.
                   HTML,CSS,JavaScript,PHP)
                 </small>
-                {/* TODDO render button-remove component*/}
-                {/** Render skills array fro button remove */}
+                {skills.map((elem) => (
+                  <ButtonRemove
+                    key={Math.random() + 23232}
+                    remove={() => removeSkill(elem)}
+                  >
+                    {elem}
+                  </ButtonRemove>
+                ))}
               </div>
               <div className="form-group">
                 <label>Short Bio</label>

@@ -1,10 +1,14 @@
 import React from "react";
+import Cancel from "../../asset/cancel.png";
+import "./button-remove.styles.scss";
 
-const ButtonRemove = (props) => {
-  <button>{props.children}</button>;
-  {
-    /** TODOO :create a button remove component */
-  }
+const ButtonRemove = ({ remove, children }) => {
+  return (
+    <div className="button-remove">
+      <img onClick={remove} src={Cancel} alt="cancel.png" />
+      <div>{children}</div>
+    </div>
+  );
 };
 
 export default ButtonRemove;
