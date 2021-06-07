@@ -7,7 +7,7 @@ const schemaDb = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users",
   },
-  username: {
+  displayName: {
     type: String,
     required: true,
     max: 40,
@@ -21,7 +21,7 @@ const schemaDb = new Schema({
   location: {
     type: String,
   },
-  status: {
+  workStatus: {
     type: String,
     required: true,
   },
@@ -32,7 +32,7 @@ const schemaDb = new Schema({
   bio: {
     type: String,
   },
-  githubusername: {
+  github: {
     type: String,
   },
   experience: [

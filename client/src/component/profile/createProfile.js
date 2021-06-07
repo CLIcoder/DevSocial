@@ -1,51 +1,87 @@
 import React, { useState } from "react";
+import { createProfileValidation } from "../../utils/create-profileValidation";
 import ButtonRemove from "../button-remove/button-remove.component";
+import axios from "axios";
 
 const CreateProfile = () => {
-  const [skills, setSkills] = useState([]);
+  /** reload confirmation for data persistance */
+  window.addEventListener("beforeunload", function (e) {
+    // Cancel the event
+    e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+    // Chrome requires returnValue to be set
+    e.returnValue = "";
+  });
+  /** reload confirmation for data persistance */
+
+  const [skill, setskill] = useState([]);
   const [field, setFiled] = useState({
     displayName: "",
     company: "",
     website: "",
     location: "",
     workStatus: "",
-    skills: [],
     bio: "",
     github: "",
   });
+  const [fieldError, setFiledError] = useState({
+    displayName: "",
+    company: "",
+    website: "",
+    location: "",
+    workStatus: "",
+    bio: "",
+    github: "",
+    skills: "",
+  });
 
   const removeSkill = (value) => {
-    if (skills.length === 1) setSkills([]);
+    if (skill.length === 1) setskill([]);
     else {
-      const newSkills = skills.filter((item) => item !== value);
-      setSkills([...newSkills]);
+      const newskill = skill.filter((item) => item !== value);
+      setskill([...newskill]);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (
-      name === "skills" &&
-      value[value.length - 1] === " " &&
-      value.length > 1
-    ) {
-      if (value.length > 15) {
-        alert("stop spamming skills");
+    if (name === "skill" && value[value.length - 1] === " ") {
+      if (value[value.length - 1] === " " && value[value.length - 2] === " ") {
+        e.target.value = "";
         return;
       }
-      if (skills.length > 14) {
-        alert("you've reach your skills limit");
+      if (skill.length > 14) {
+        alert("you've reach your skill limit");
         return;
       }
-      setSkills((oldArray) => [...oldArray, value.slice(0, -1)]);
+      setskill((oldArray) => [...oldArray, value.slice(0, -1)]);
       e.target.value = "";
     }
-    setFiled({ ...field, [name]: value });
+    if (name !== "skill") {
+      setFiled({ ...field, [name]: value });
+    }
   };
 
-  const submitData = (e) => {
+  const submitData = async (e) => {
     e.preventDefault();
-    //...pushing data to server TODOO
+    const error = createProfileValidation({ ...field, skills: skill });
+    if (error) {
+      setFiledError({ ...error });
+      return;
+    }
+    console.log(JSON.stringify({ ...field, skills: [...skill] }));
+    await axios
+      .post(
+        "http://localhost:5000/api/profile",
+        JSON.stringify({ ...field, skills: [...skill] }),
+        {
+          headers: {
+            authorisation: window.localStorage.getItem("authorisation"),
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
   return (
     <div className="login">
@@ -65,6 +101,7 @@ const CreateProfile = () => {
                     placeholder="Display Name"
                     onChange={handleChange}
                   />
+                  <div style={{ color: "red" }}>{fieldError.displayName}</div>
                 </div>
                 <div className="col-auto">
                   Github
@@ -80,6 +117,7 @@ const CreateProfile = () => {
                       onChange={handleChange}
                       placeholder="Username"
                     />
+                    <div style={{ color: "red" }}>{fieldError.github}</div>
                   </div>
                 </div>
                 <div className="form-group col-md-6">
@@ -91,6 +129,7 @@ const CreateProfile = () => {
                     className="form-control"
                     placeholder="Google"
                   />
+                  <div style={{ color: "red" }}>{fieldError.company}</div>
                 </div>
               </div>
               <div className="form-group">
@@ -102,6 +141,7 @@ const CreateProfile = () => {
                   placeholder="1234 Main St"
                   name="location"
                 />
+                <div style={{ color: "red" }}>{fieldError.location}</div>
               </div>
               <div className="form-group">
                 <label>Website</label>
@@ -112,6 +152,7 @@ const CreateProfile = () => {
                   onChange={handleChange}
                   placeholder="exemple.com"
                 />
+                <div style={{ color: "red" }}>{fieldError.website}</div>
               </div>
               <div className="form-row">
                 <div className="form-group col-md-4">
@@ -132,15 +173,16 @@ const CreateProfile = () => {
               <div className="form-group">
                 <input
                   type="text"
-                  placeholder="* Skills"
-                  name="skills"
+                  placeholder="* skill"
+                  name="skill"
                   onChange={handleChange}
                 />
+                <div style={{ color: "red" }}>{fieldError.skills}</div>
                 <small className="form-text">
-                  Please use space separated values (eg.
-                  HTML,CSS,JavaScript,PHP)
+                  Please use space separated values (eg. HTML CSS JavaScript
+                  PHP)
                 </small>
-                {skills.map((elem) => (
+                {skill.map((elem) => (
                   <ButtonRemove
                     key={Math.random() + 23232}
                     remove={() => removeSkill(elem)}
@@ -158,10 +200,11 @@ const CreateProfile = () => {
                   name="bio"
                   onChange={handleChange}
                 ></textarea>
+                <div style={{ color: "red" }}>{fieldError.bio}</div>
               </div>
 
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button type="submit" className="btn btn-primary float-right">
+                Next ⏭️
               </button>
             </form>
           </div>

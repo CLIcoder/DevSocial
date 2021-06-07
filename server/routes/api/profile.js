@@ -23,29 +23,34 @@ route.post("/", authenticateToken, async (req, res) => {
     //validation the request format
     const request = req.body;
     if (schemaValidation(request)) {
-      throw new Error(
-        `😞Your data is not valid😞 ${schemaValidation(request)}`
-      );
+      throw Error(`😞Your data is not valid😞 ${schemaValidation(request)}`);
     }
-
     //check if the profile exist
-    await Profile.findOne({ user: req.user._doc._id }).then(async (profile) => {
-      if (profile) {
-        Profile.findOneAndUpdate(
-          { user: req.user._doc._id },
-          { $set: req.body },
-          { new: true }
-        ).then((profile) => res.json(profile));
-      } else {
-        const result = new Profile({ user: req.user._doc._id, ...request });
-        await result.save();
-        return res.status(200).send("profile created succefully");
-      }
-    });
+
+    await Profile.findOne({ user: req.user._id })
+      .then(async (profile) => {
+        if (profile) {
+          Profile.findOneAndUpdate(
+            { user: req.user._id },
+            { $set: req.body },
+            { new: true }
+          ).then((profile) => res.status(200).json(profile));
+        } else {
+          //return res.json(request);
+          const result = new Profile({ user: req.user._id, ...request });
+          await result.save().catch((err) => {
+            throw err;
+          });
+          return res.status(200).send("profile created succefully");
+        }
+      })
+      .catch((err) => {
+        throw new Error("problem in monodb");
+      });
 
     // create new profile for the logged in user
   } catch (err) {
-    res.status(404).send(`${err}`);
+    res.status(400).send(err);
   }
 });
 
@@ -63,10 +68,10 @@ route.post("/experience", authenticateToken, async (req, res) => {
       );
     }
     // collect the data from mongodb
-    await Profile.findOne({ user: req.user._doc._id }).then((profile) => {
+    await Profile.findOne({ user: req.user._id }).then((profile) => {
       const newExperience = [...profile.experience, request];
       Profile.findOneAndUpdate(
-        { user: req.user._doc._id },
+        { user: req.user._id },
         { $set: { experience: newExperience } }
       )
         .then((profile) => res.json(profile))
