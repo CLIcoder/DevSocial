@@ -28,8 +28,21 @@ export const schemaValidation_exp = (objectVal) => {
     company: Joi.string().min(2).max(40).required(),
     location: Joi.string().min(2).max(1000),
     from: Joi.string().min(2).max(100).required(),
-    to: Joi.date().min(2).max(100),
+    to: Joi.string().min(2).max(100),
     current: Joi.boolean(),
+    description: Joi.string().min(2).max(10000),
+  });
+  const { error } = schema.validate(objectVal);
+  return error;
+};
+
+export const schemaValidation_edu = (objectVal) => {
+  const schema = Joi.object({
+    school: Joi.string().min(2).max(40).required(),
+    degree: Joi.string().min(2).max(40).required(),
+    fieldofstudy: Joi.string().min(2).max(40).required(),
+    from: Joi.string().min(2).max(100).required(),
+    to: Joi.string().min(2).max(100),
     description: Joi.string().min(2).max(10000),
   });
   const { error } = schema.validate(objectVal);

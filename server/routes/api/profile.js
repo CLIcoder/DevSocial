@@ -3,6 +3,7 @@ import { request, Router } from "express";
 import authenticateToken from "../../middlwares/auth-token.js";
 import schemaValidation, {
   schemaValidation_exp,
+  schemaValidation_edu,
 } from "../../model/Profile/validation.js";
 import Profile from "../../model/Profile/Profile.js";
 
@@ -63,24 +64,57 @@ route.post("/experience", authenticateToken, async (req, res) => {
     //validate experience data
     const request = req.body;
     if (schemaValidation_exp(request)) {
-      throw new Error(
+      throw Error(
         `😞Your data is not valid😞 ${schemaValidation_exp(request)} `
       );
     }
     // collect the data from mongodb
-    await Profile.findOne({ user: req.user._id }).then((profile) => {
-      const newExperience = [...profile.experience, request];
-      Profile.findOneAndUpdate(
-        { user: req.user._id },
-        { $set: { experience: newExperience } }
-      )
-        .then((profile) => res.json(profile))
-        .catch((err) => {
-          throw err;
-        });
-    });
+    await Profile.findOne({ user: req.user._id })
+      .then((profile) => {
+        const newExperience = [...profile.experience, request];
+        Profile.findOneAndUpdate(
+          { user: req.user._id },
+          { $set: { experience: newExperience } }
+        )
+          .then((profile) => res.json(profile))
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => {
+        throw Error(err);
+      });
   } catch (err) {
-    res.status(404).send(`${err}`);
+    res.status(400).send(err.message);
+  }
+});
+route.post("/education", authenticateToken, async (req, res) => {
+  try {
+    //validate experience data
+    const request = req.body;
+    if (schemaValidation_edu(request)) {
+      throw Error(
+        `😞Your data is not valid😞 ${schemaValidation_edu(request)} `
+      );
+    }
+    // collect the data from mongodb
+    await Profile.findOne({ user: req.user._id })
+      .then((profile) => {
+        const newEducation = [...profile.education, request];
+        Profile.findOneAndUpdate(
+          { user: req.user._id },
+          { $set: { education: newEducation } }
+        )
+          .then((profile) => res.json(profile))
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => {
+        throw Error(err);
+      });
+  } catch (err) {
+    res.status(400).send(err.message);
   }
 });
 

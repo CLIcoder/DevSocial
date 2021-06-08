@@ -10,6 +10,8 @@ import Navbar from "./component/layout/navbar";
 import Footer from "./component/layout/footer";
 import Dashboard from "./component/profile/Dashbord";
 import CreateProfile from "./component/profile/createProfile";
+import CreateExperience from "./component/experience/create-experience";
+import CreateEducation from "./component/education/create-education";
 import Home from "./pages/home";
 
 // routes
@@ -49,7 +51,18 @@ const App = () => {
       <LoggedIn exact path="/signup" component={SignUp} />
       <LoggedIn exact path="/signin" component={SignIn} />
       <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+      <PrivateRoute
+        exact
+        path="/create-education"
+        component={CreateEducation}
+      />
+      <PrivateRoute
+        exact
+        path="/create-experience"
+        component={CreateExperience}
+      />
       <PrivateRoute exact path="/Dashboard" component={Dashboard} />
+
       <Redirect to="/" />
       <Footer />
     </BrowserRouter>

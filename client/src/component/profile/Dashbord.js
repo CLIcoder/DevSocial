@@ -10,7 +10,7 @@ const Dashboard = () => {
     <>
       <h1> welcome {user.name} </h1>
       <h3>No profile found !</h3>
-      <button onClick={() => history.push("/create-profile")}>
+      <button onClick={() => history.push("/create-education")}>
         create your profile
       </button>
     </>

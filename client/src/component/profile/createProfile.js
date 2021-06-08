@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { createProfileValidation } from "../../utils/create-profileValidation";
 import ButtonRemove from "../button-remove/button-remove.component";
 import axios from "axios";
@@ -13,6 +14,7 @@ const CreateProfile = () => {
   });
   /** reload confirmation for data persistance */
 
+  const history = useHistory();
   const [skill, setskill] = useState([]);
   const [field, setFiled] = useState({
     displayName: "",
@@ -68,7 +70,6 @@ const CreateProfile = () => {
       setFiledError({ ...error });
       return;
     }
-    console.log(JSON.stringify({ ...field, skills: [...skill] }));
     await axios
       .post(
         "http://localhost:5000/api/profile",
@@ -80,7 +81,7 @@ const CreateProfile = () => {
           },
         }
       )
-      .then((res) => console.log(res))
+      .then(() => history.push("/create-experience"))
       .catch((err) => console.log(err));
   };
   return (
