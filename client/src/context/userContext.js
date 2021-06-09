@@ -10,6 +10,7 @@ export const UserProvider = (props) => {
     avatar: "",
     date: "",
     iat: "",
+    profile: {},
   });
 
   return (

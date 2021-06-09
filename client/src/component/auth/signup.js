@@ -38,7 +38,6 @@ const SignUp = () => {
           await axios
             .post("http://localhost:5000/api/users/signin", { ...res.data })
             .then((res) => {
-              // logging the user then redirecting to dashboard page
               window.localStorage.setItem("authorisation", res.data.tokens);
               window.location.reload();
             });

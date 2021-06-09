@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { userContext } from "../../context/userContext";
+import { getUserData } from "../../utils/getUser-data";
 
 const Navbar = () => {
-  const [user] = useContext(userContext);
+  const { avatar } = getUserData();
+
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
       <div className="container">
@@ -52,13 +53,13 @@ const Navbar = () => {
                 </button>
                 <img
                   className="rounded-circle"
+                  src={avatar}
+                  alt=""
                   style={{
                     width: "60px",
                     height: "50px",
                     marginRight: "20px",
                   }}
-                  src={user.avatar}
-                  alt={user.name}
                   title="You must have a Gravatar connected to your email to display an image"
                 />
               </>

@@ -1,18 +1,20 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { userContext } from "../../context/userContext";
+
+import { getUserData } from "../../utils/getUser-data";
 
 const Dashboard = () => {
-  const [user] = useContext(userContext);
   const history = useHistory();
+  const data = getUserData();
+  console.log(data);
   //rerender the page
   return (
     <>
-      <h1> welcome {user.name} </h1>
+      <h1> welcome {data.name}</h1>
       <h3>No profile found !</h3>
       <button
         onClick={() => {
-          history.push("/display-profile");
+          history.push("/create-profile");
         }}
       >
         create your profile
