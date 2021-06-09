@@ -10,7 +10,7 @@ const LoggedIn = ({ component: Component, ...rest }) => {
         !window.localStorage.getItem("authorisation") ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/dashboard" />
+          <Redirect to="/display-profile" />
         )
       }
     />

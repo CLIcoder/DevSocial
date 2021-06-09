@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { BrowserRouter, Redirect } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import { userContext } from "./context/userContext";
 import jsonwebtoken from "jsonwebtoken";
 
@@ -12,6 +12,7 @@ import Dashboard from "./component/profile/Dashbord";
 import CreateProfile from "./component/profile/createProfile";
 import CreateExperience from "./component/experience/create-experience";
 import CreateEducation from "./component/education/create-education";
+import DisplayProfile from "./component/display-profile/display-profile";
 import Home from "./pages/home";
 
 // routes
@@ -61,9 +62,8 @@ const App = () => {
         path="/create-experience"
         component={CreateExperience}
       />
+      <Route exact path="/display-profile" component={DisplayProfile} />
       <PrivateRoute exact path="/Dashboard" component={Dashboard} />
-
-      <Redirect to="/" />
       <Footer />
     </BrowserRouter>
   );

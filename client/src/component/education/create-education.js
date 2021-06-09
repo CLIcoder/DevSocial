@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { createEducationValidation } from "../../utils/create-experienceValidation";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const CreateExperience = () => {
+  const history = useHistory();
   const [field, setField] = useState({
     school: "",
     degree: "",
@@ -45,7 +47,7 @@ const CreateExperience = () => {
           },
         }
       )
-      .then((res) => console.log(res))
+      .then(() => history.push("display-profile"))
       .catch((err) => console.log(err));
   };
   return (

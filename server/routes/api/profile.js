@@ -11,8 +11,16 @@ const route = Router();
 
 // testing route for react server
 
-route.get("/", authenticateToken, (req, res) => {
-  res.send("you're authorized to access this route");
+route.get("/:id", async (req, res) => {
+  try {
+    await Profile.findOne({ user: req.params.id })
+      .then((result) => res.status(200).json(result))
+      .catch((err) => {
+        throw err;
+      });
+  } catch (err) {
+    res.status(400).send(err.message);
+  }
 });
 
 // @route   POST api/profile
