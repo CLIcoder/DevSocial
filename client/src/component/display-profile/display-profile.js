@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import { getProfileData } from "../../utils/getProfile-data";
 import Loader from "../laoder/loader.component";
 
-const DisplayProfile = () => {
+const DisplayProfile = ({ location: { customNameData } }) => {
+  //location us a prop data for other users to see their profile when not LoggedIn
   const [userData, setUserData] = useState({});
 
   const displayData = async () => {
-    const userData = await getProfileData();
+    const userData = await getProfileData(customNameData);
     setUserData({ ...userData });
   };
 
   useEffect(() => {
     displayData();
+    return;
   }, []);
 
   return (
