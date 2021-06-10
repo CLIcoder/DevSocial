@@ -9,7 +9,7 @@ import Profile from "../../model/Profile/Profile.js";
 
 const route = Router();
 
-// testing route for react server
+// get individual profile
 
 route.get("/:id", async (req, res) => {
   try {
@@ -20,6 +20,20 @@ route.get("/:id", async (req, res) => {
       });
   } catch (err) {
     res.status(400).send(err.message);
+  }
+});
+
+// get all profile that are inside the Router
+
+route.get("/", async (req, res) => {
+  try {
+    await Profile.find({}, (err, profiles) => {
+      if (err) throw Error("something went wrong with your query");
+      res.status(200).json(profiles);
+      return;
+    });
+  } catch (err) {
+    res.status(400).json(err.message);
   }
 });
 

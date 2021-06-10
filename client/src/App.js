@@ -11,6 +11,7 @@ import CreateProfile from "./component/profile/createProfile";
 import CreateExperience from "./component/experience/create-experience";
 import CreateEducation from "./component/education/create-education";
 import DisplayProfile from "./component/display-profile/display-profile";
+import Profiles from "./component/profiles/profiles.component";
 import Home from "./pages/home";
 
 //routes
@@ -32,6 +33,7 @@ const App = () => {
       <LoggedIn path="/create-experience" component={CreateExperience} />
       <LoggedIn path="/display-profile" component={DisplayProfile} />
       <LoggedIn path="/Dashboard" component={Dashboard} />
+      <LoggedIn path="/profiles" component={Profiles} />
       <Footer />
     </BrowserRouter>
   );

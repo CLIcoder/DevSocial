@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { getProfileData } from "../../utils/getProfile-data";
-import { getUserData } from "../../utils/getUser-data";
 import Loader from "../laoder/loader.component";
 
 const DisplayProfile = () => {
@@ -10,8 +9,6 @@ const DisplayProfile = () => {
     const userData = await getProfileData();
     setUserData({ ...userData });
   };
-
-  const { avatar } = getUserData();
 
   useEffect(() => {
     displayData();
@@ -33,11 +30,11 @@ const DisplayProfile = () => {
                   marginLeft: "10%",
                 }}
                 className="rounded-circle  "
-                src={avatar}
+                src={`https://avatars.githubusercontent.com/${userData.github}`}
                 alt=""
               />
-              <h1 className="large float-middle">{userData.displayName}</h1>
-              <p className="lead float-middle">{userData.workStatus}</p>
+              <h1 className="large align-middle ">{userData.displayName}</h1>
+              <p className="lead align-middle">{userData.workStatus}</p>
               <p>{userData.location}</p>
             </div>
 
@@ -46,7 +43,7 @@ const DisplayProfile = () => {
               <p>{userData.bio}</p>
               <div className="line"></div>
               <h2 className="text-primary">Skill Set</h2>
-              <div className="skills">
+              <div className="skills d-flex">
                 {userData.skills.map((elem, indx) => {
                   return (
                     <div key={Math.random() + indx} className="p-1">
@@ -163,13 +160,15 @@ const DisplayProfile = () => {
                       </div>
                       <div>
                         <ul>
-                          <li className="badge badge-primary">
+                          <li className="badge badge-primary    ">
                             Stars: {stargazers_count}
                           </li>
-                          <li className="badge badge-dark">
+                          <li className="badge badge-dark ml-4 ">
                             Watchers: {watchers_count}
                           </li>
-                          <li className="badge badge-light">Forks: {forks}</li>
+                          <li className="badge badge-light ml-4">
+                            Forks: {forks}
+                          </li>
                         </ul>
                       </div>
                     </div>
