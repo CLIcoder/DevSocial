@@ -72,7 +72,7 @@ const CreateProfile = () => {
       setFiledError({ ...error });
       return;
     }
-
+    console.log(JSON.stringify(field));
     setLoader(true);
 
     await axios
@@ -87,7 +87,7 @@ const CreateProfile = () => {
         }
       )
       .then(() => history.push("/create-experience"))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.message));
   };
   return (
     <div className="login">

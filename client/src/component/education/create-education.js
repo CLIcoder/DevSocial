@@ -95,7 +95,7 @@ const CreateExperience = () => {
               <input type="date" name="from" onChange={handleChange} />
               <div style={{ color: "red" }}>{error.from}</div>
             </div>
-            <div className="form-group"></div>
+
             <div className="form-group">
               <h4>To Date</h4>
               <input type="date" name="to" onChange={handleChange} />

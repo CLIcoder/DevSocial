@@ -103,9 +103,15 @@ const CreateExperience = () => {
               </p>
             </div>
             <div className="form-group">
-              <h4>To Date</h4>
-              <input type="date" name="to" onChange={handleChange} />
-              <div style={{ color: "red" }}>{error.to}</div>
+              {!field.current ? (
+                <>
+                  <h4>To Date</h4>
+                  <input type="date" name="to" onChange={handleChange} />
+                  <div style={{ color: "red" }}>{error.to}</div>{" "}
+                </>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group">
               <textarea

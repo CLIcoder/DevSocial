@@ -19,7 +19,7 @@ route.get("/:id", async (req, res) => {
         throw err;
       });
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).send("something went wrong");
   }
 });
 
@@ -33,7 +33,7 @@ route.get("/", async (req, res) => {
       return;
     });
   } catch (err) {
-    res.status(400).json(err.message);
+    res.status(404).json(err);
   }
 });
 
@@ -57,7 +57,11 @@ route.post("/", authenticateToken, async (req, res) => {
             { user: req.user._id },
             { $set: req.body },
             { new: true }
-          ).then((profile) => res.status(200).json(profile));
+          )
+            .then((profile) => res.status(200).json(profile))
+            .catch((err) => {
+              throw err;
+            });
         } else {
           //return res.json(request);
           const result = new Profile({ user: req.user._id, ...request });
@@ -68,12 +72,12 @@ route.post("/", authenticateToken, async (req, res) => {
         }
       })
       .catch((err) => {
-        throw new Error("problem in monodb");
+        throw Error("problem in monodb");
       });
 
     // create new profile for the logged in user
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send(err.message);
   }
 });
 

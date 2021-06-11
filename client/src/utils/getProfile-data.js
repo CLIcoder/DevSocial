@@ -11,6 +11,7 @@ export const getProfileData = async (_id = undefined) => {
     // if the _id value is given it will be called else _userid will take place from display-profile props
     `http://localhost:5000/api/profile/${_id || _userid}`
   );
+  if (profileData === null) return false;
   userData = { ...profileData };
 
   //desctructuring github from user data
@@ -19,8 +20,6 @@ export const getProfileData = async (_id = undefined) => {
     `https://api.github.com/users/${github}/repos?per_page=5`
   );
   userData = { ...userData, repos: data };
-
-  console.log("value", userData);
 
   return userData;
 };

@@ -49,11 +49,12 @@ const schemaDb = new Schema({
         type: String,
       },
       from: {
-        type: Date,
+        type: String,
         required: true,
       },
       to: {
-        type: Date,
+        type: String,
+        defautl: "",
       },
       current: {
         type: Boolean,
@@ -79,11 +80,11 @@ const schemaDb = new Schema({
         required: true,
       },
       from: {
-        type: Date,
+        type: String,
         required: true,
       },
       to: {
-        type: Date,
+        type: String,
       },
       current: {
         type: Boolean,

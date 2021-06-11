@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { getProfileData } from "../../utils/getProfile-data";
 
 import { getUserData } from "../../utils/getUser-data";
-import Loader from "../laoder/loader.component";
 
 const Dashboard = () => {
+  const history = useHistory();
   const [profile, setProfile] = useState({});
   const [userdata, setUserData] = useState({});
 
   const getData = async () => {
     const result = await getProfileData();
     const data = getUserData();
-    console.log("result", data);
-    setProfile({ ...result });
+    if (result) setProfile({ ...result });
     setUserData({ ...data });
   };
 
@@ -23,13 +23,25 @@ const Dashboard = () => {
   return (
     <>
       <section class="container">
-        {Object.entries(profile).length > 0 &&
-        Object.entries(userdata).length > 0 ? (
+        {Object.entries(userdata).length > 0 ? (
           <>
             <h1 class="large text-primary">Dashboard</h1>
             <p class="lead">
               <i class="fas fa-user"></i> Welcome {userdata.name}
             </p>
+            {Object.entries(profile).length === 0 ? (
+              <button onClick={() => history.push("/create-profile")}>
+                create profile
+              </button>
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          ""
+        )}
+        {Object.entries(profile).length > 0 ? (
+          <>
             <div class="dash-buttons">
               <a href="create-profile.html" class="btn btn-light">
                 <i class="fas fa-user-circle text-primary"></i> Edit Profile
@@ -100,7 +112,7 @@ const Dashboard = () => {
             </div>
           </>
         ) : (
-          <Loader />
+          ""
         )}
       </section>
     </>
