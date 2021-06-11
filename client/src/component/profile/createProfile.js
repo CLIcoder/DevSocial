@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { createProfileValidation } from "../../utils/create-profileValidation";
 import ButtonRemove from "../button-remove/button-remove.component";
 import axios from "axios";
 import Loader from "../laoder/loader.component";
+import { getProfileData } from "../../utils/getProfile-data";
 
-const CreateProfile = () => {
+const CreateProfile = ({ location: { customNameData } }) => {
   /** reload confirmation for data persistance */
   window.addEventListener("beforeunload", function (e) {
     // Cancel the event
@@ -72,7 +73,8 @@ const CreateProfile = () => {
       setFiledError({ ...error });
       return;
     }
-    console.log(JSON.stringify(field));
+
+    console.log("testing", JSON.stringify({ ...field, skills: [...skill] }));
     setLoader(true);
 
     await axios
@@ -89,16 +91,43 @@ const CreateProfile = () => {
       .then(() => history.push("/create-experience"))
       .catch((err) => console.log(err.message));
   };
+  const displayData = async () => {
+    const userData = await getProfileData();
+    setFiled({
+      displayName: userData.displayName,
+      company: userData.company,
+      website: userData.website,
+      location: userData.location,
+      workStatus: userData.workStatus,
+      bio: userData.bio,
+      github: userData.github,
+    });
+    setskill([...userData.skills]);
+  };
+  useEffect(() => {
+    if (customNameData) {
+      displayData();
+      return;
+    }
+  }, []);
   return (
     <div className="login">
       {!loader ? (
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Create Profile</h1>
-              <p className="lead text-center">
-                Welcome to the devsocial journey
-              </p>
+              {customNameData ? (
+                <>
+                  <h1 className="display-4 text-center">Edit Profile</h1>
+                </>
+              ) : (
+                <>
+                  <h1 className="display-4 text-center">Create-profile</h1>
+                  <p className="lead text-center">
+                    Welcome to the devsocial journey
+                  </p>
+                </>
+              )}
               <form onSubmit={submitData}>
                 <div className="form-row">
                   <div className="form-group col-md-6">
@@ -107,6 +136,7 @@ const CreateProfile = () => {
                       type="text"
                       className="form-control"
                       name="displayName"
+                      value={field.displayName}
                       placeholder="Display Name"
                       onChange={handleChange}
                     />
@@ -123,6 +153,7 @@ const CreateProfile = () => {
                         type="text"
                         className="form-control"
                         name="github"
+                        value={field.github}
                         onChange={handleChange}
                         placeholder="Username"
                       />
@@ -135,6 +166,7 @@ const CreateProfile = () => {
                       type="text"
                       name="company"
                       onChange={handleChange}
+                      value={field.company}
                       className="form-control"
                       placeholder="Google"
                     />
@@ -147,6 +179,7 @@ const CreateProfile = () => {
                     type="text"
                     className="form-control"
                     onChange={handleChange}
+                    value={field.location}
                     placeholder="1234 Main St"
                     name="location"
                   />
@@ -159,6 +192,7 @@ const CreateProfile = () => {
                     type="text"
                     className="form-control"
                     onChange={handleChange}
+                    value={field.website}
                     placeholder="exemple.com"
                   />
                   <div style={{ color: "red" }}>{fieldError.website}</div>
@@ -170,6 +204,7 @@ const CreateProfile = () => {
                       className="form-control"
                       name="workStatus"
                       onChange={handleChange}
+                      value={field.workStatus}
                     >
                       <option>Full-stack Developer</option>
                       <option>Front-End Developer</option>
@@ -208,6 +243,7 @@ const CreateProfile = () => {
                     rows="3"
                     name="bio"
                     onChange={handleChange}
+                    value={field.bio}
                   ></textarea>
                   <div style={{ color: "red" }}>{fieldError.bio}</div>
                 </div>

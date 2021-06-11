@@ -70,7 +70,7 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                         <p>{from} - Current</p>
                       ) : (
                         <p>
-                          {from} - {to}
+                          {from} {to.length === 0 ? "" : "->" + to}
                         </p>
                       )}
 
@@ -110,7 +110,7 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                         <p>{from} - current</p>
                       ) : (
                         <p>
-                          {from} - {to}
+                          {from} {to.length === 0 ? "" : "->" + to}
                         </p>
                       )}
 

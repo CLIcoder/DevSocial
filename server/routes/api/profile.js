@@ -6,6 +6,7 @@ import schemaValidation, {
   schemaValidation_edu,
 } from "../../model/Profile/validation.js";
 import Profile from "../../model/Profile/Profile.js";
+import User from "../../model/Users/User.js";
 
 const route = Router();
 
@@ -141,6 +142,60 @@ route.post("/education", authenticateToken, async (req, res) => {
       });
   } catch (err) {
     res.status(400).send(err.message);
+  }
+});
+
+// @route    DELETE api/prof/:id
+// @desc     Delete a experience
+route.delete("/experience/:exp_id", authenticateToken, async (req, res) => {
+  try {
+    const foundProfile = await Profile.findOne({ user: req.user._id });
+
+    foundProfile.experience = foundProfile.experience.filter(
+      (exp) => exp._id.toString() !== req.params.exp_id
+    );
+
+    await foundProfile.save();
+    return res.status(200).json(foundProfile);
+  } catch (error) {
+    return res.status(400).json({ msg: "Server error" });
+  }
+});
+
+// @desc     Delete a eduction
+// @access   Private
+route.delete("/education/:edu_id", authenticateToken, async (req, res) => {
+  try {
+    const foundProfile = await Profile.findOne({ user: req.user._id });
+
+    foundProfile.education = foundProfile.education.filter(
+      (edu) => edu._id.toString() !== req.params.edu_id
+    );
+
+    await foundProfile.save();
+    return res.status(200).json(foundProfile);
+  } catch (error) {
+    return res.status(400).json({ msg: "Server error" });
+  }
+});
+
+// @route    DELETE api/profile
+// @desc     Delete profile, user & posts
+// @access   Private
+route.delete("/", authenticateToken, async (req, res) => {
+  try {
+    // Remove user posts
+    // Remove profile
+    // Remove user
+    await Promise.all([
+      Profile.findOneAndRemove({ user: req.user._id }),
+      User.findOneAndRemove({ _id: req.user._id }),
+    ]);
+
+    res.json({ msg: "User deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(400).send("Server Error");
   }
 });
 

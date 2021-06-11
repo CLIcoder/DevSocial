@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getProfileData } from "../../utils/getProfile-data";
 import { getUserData } from "../../utils/getUser-data";
 
 const Navbar = () => {
-  const { avatar } = getUserData();
+  const [avatar, setAvatar] = useState("");
+
+  const displayData = async () => {
+    const userData = await getProfileData();
+    const { avatar } = getUserData();
+    if (!userData) setAvatar(avatar);
+    else {
+      setAvatar(`https://avatars.githubusercontent.com/${userData.github}`);
+    }
+  };
+
+  useEffect(() => {
+    displayData();
+    return;
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">

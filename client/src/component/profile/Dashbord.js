@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import {
+  deleteAll,
+  deleteEducation,
+  deleteExperience,
+} from "../../utils/delete";
 import { getProfileData } from "../../utils/getProfile-data";
 
 import { getUserData } from "../../utils/getUser-data";
@@ -22,12 +27,12 @@ const Dashboard = () => {
   }, []);
   return (
     <>
-      <section class="container">
+      <section className="container">
         {Object.entries(userdata).length > 0 ? (
           <>
-            <h1 class="large text-primary">Dashboard</h1>
-            <p class="lead">
-              <i class="fas fa-user"></i> Welcome {userdata.name}
+            <h1 className="large text-primary">Dashboard</h1>
+            <p className="lead">
+              <i className="fas fa-user"></i> Welcome {userdata.name}
             </p>
             {Object.entries(profile).length === 0 ? (
               <button onClick={() => history.push("/create-profile")}>
@@ -42,40 +47,66 @@ const Dashboard = () => {
         )}
         {Object.entries(profile).length > 0 ? (
           <>
-            <div class="dash-buttons">
-              <a href="create-profile.html" class="btn btn-light">
-                <i class="fas fa-user-circle text-primary"></i> Edit Profile
+            <div className="dash-buttons">
+              <a
+                onClick={() =>
+                  history.push({
+                    pathname: "/create-profile",
+                    customNameData: "edit profile",
+                  })
+                }
+                className="btn btn-light"
+              >
+                <i className="fas fa-user-circle text-primary"></i> Edit Profile
               </a>
-              <a href="add-experience.html" class="btn btn-light">
-                <i class="fab fa-black-tie text-primary"></i> Add Experience
+              <a
+                onClick={() => history.push("/create-experience")}
+                className="btn btn-light"
+              >
+                <i className="fab fa-black-tie text-primary"></i> Add Experience
               </a>
-              <a href="add-education.html" class="btn btn-light">
-                <i class="fas fa-graduation-cap text-primary"></i> Add Education
+              <a
+                onClick={() => history.push("/create-education")}
+                className="btn btn-light"
+              >
+                <i className="fas fa-graduation-cap text-primary"></i> Add
+                Education
               </a>
             </div>
 
-            <h2 class="my-2">Experience Credentials</h2>
-            <table class="table">
+            <h2 className="my-2">Experience Credentials</h2>
+            <table className="table">
               <thead>
                 <tr>
                   <th>Company</th>
-                  <th class="hide-sm">Title</th>
-                  <th class="hide-sm">Years</th>
+                  <th className="hide-sm">Title</th>
+                  <th className="hide-sm">Years</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 {profile.experience.map(
-                  ({ title, company, from, to }, indx) => {
+                  ({ title, company, from, to, _id }, indx) => {
                     return (
                       <tr key={Math.random() + indx}>
                         <td>{company}</td>
-                        <td class="hide-sm">{title}</td>
-                        <td class="hide-sm">
-                          {from} - {to}
+                        <td className="hide-sm">{title}</td>
+                        <td className="hide-sm">
+                          {from} {to.length === 0 ? "" : "->" + to}
                         </td>
                         <td>
-                          <button class="btn btn-danger">Delete</button>
+                          <button
+                            onClick={async () => {
+                              if (window.confirm("Delete the item?")) {
+                                await deleteExperience(_id);
+                                getData();
+                                return;
+                              }
+                            }}
+                            className="btn btn-danger"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     );
@@ -84,29 +115,59 @@ const Dashboard = () => {
               </tbody>
             </table>
 
-            <h2 class="my-2">Education Credentials</h2>
-            <table class="table">
+            <h2 className="my-2">Education Credentials</h2>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>school</th>
+                  <th className="hide-sm">degree</th>
+                  <th className="hide-sm">Years</th>
+                  <th></th>
+                </tr>
+              </thead>
               <tbody>
-                {profile.education.map(({ school, degree, from, to }, indx) => {
-                  return (
-                    <tr key={Math.random() + indx}>
-                      <td>{school}</td>
-                      <td class="hide-sm">{degree}</td>
-                      <td class="hide-sm">
-                        {from} - {to}
-                      </td>
-                      <td>
-                        <button class="btn btn-danger">Delete</button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {profile.education.map(
+                  ({ school, degree, from, to, _id }, indx) => {
+                    return (
+                      <tr key={Math.random() + indx}>
+                        <td>{school}</td>
+                        <td className="hide-sm">{degree}</td>
+                        <td className="hide-sm">
+                          {from} {to.length === 0 ? "" : "->" + to}
+                        </td>
+                        <td>
+                          <button
+                            onClick={async () => {
+                              if (window.confirm("Delete the item?")) {
+                                await deleteEducation(_id);
+                                getData();
+                                return;
+                              }
+                            }}
+                            className="btn btn-danger"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
               </tbody>
             </table>
-
-            <div class="my-2">
-              <button class="btn btn-danger">
-                <i class="fas fa-user-minus"></i>
+            <div className="">
+              <button
+                onClick={async () => {
+                  if (window.confirm("Delete the account?")) {
+                    await deleteAll();
+                    window.localStorage.removeItem("authorisation");
+                    window.location.reload();
+                    return;
+                  }
+                }}
+                className=" btn btn-danger"
+              >
+                <i className=""></i>
                 Delete My Account
               </button>
             </div>
