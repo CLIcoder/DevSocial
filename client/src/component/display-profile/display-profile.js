@@ -58,6 +58,11 @@ const DisplayProfile = ({ location: { customNameData } }) => {
 
             <div className="profile-exp bg-white p-2">
               <h2 className="text-primary">Experience</h2>
+              {userData.experience.length === 0 ? (
+                <h1>No experience Found!</h1>
+              ) : (
+                ""
+              )}
               {userData.experience.map(
                 (
                   { current, title, company, location, from, to, description },
@@ -90,6 +95,11 @@ const DisplayProfile = ({ location: { customNameData } }) => {
 
             <div className="profile-edu bg-white p-2">
               <h2 className="text-primary">Education</h2>
+              {userData.education.length === 0 ? (
+                <h1>No education Found!</h1>
+              ) : (
+                ""
+              )}
               {userData.education.map(
                 (
                   {
@@ -136,6 +146,7 @@ const DisplayProfile = ({ location: { customNameData } }) => {
               <h2 className="text-primary my-1">
                 <i className="fab fa-github"></i> Github Repos
               </h2>
+              {userData.repos.length === 0 ? <h1>No repo Found!</h1> : ""}
               {userData.repos.map(
                 (
                   {
