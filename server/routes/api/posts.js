@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authenticateToken from "../../middlwares/auth-token.js";
 import Post from "../../model/Post/Post.js";
+import { countLikes, likeFunc } from "../../utils.js";
 
 const route = Router();
 
@@ -28,10 +29,7 @@ route.post("/", authenticateToken, async (req, res) => {
 route.post("/comment/:id", authenticateToken, async (req, res) => {
   try {
     Post.findOne({ _id: req.params.id }).then(({ comments }) => {
-      const newArray = [
-        ...comments,
-        { id: req.body.id, content: req.body.content },
-      ];
+      const newArray = [...comments, { ...req.body }];
       Post.findOneAndUpdate(
         { _id: req.params.id },
         { $set: { comments: [...newArray] } },
@@ -44,14 +42,19 @@ route.post("/comment/:id", authenticateToken, async (req, res) => {
 });
 route.post("/like/:id", authenticateToken, async (req, res) => {
   try {
-    Post.findOne({ _id: req.params.id }).then(({ likes }) => {
-      const newArray = [
-        ...likes,
-        { id: req.body.id, content: req.body.content },
-      ];
+    Post.findOne({ _id: req.params.id }).then(({ likes: { users } }) => {
+      const newArray = likeFunc([...users], req.body.id);
+      const amount = countLikes(newArray);
       Post.findOneAndUpdate(
         { _id: req.params.id },
-        { $set: { likes: [...newArray] } },
+        {
+          $set: {
+            likes: {
+              amount,
+              users: [...newArray],
+            },
+          },
+        },
         { new: true }
       ).then((result) => res.json(result));
     });
@@ -70,6 +73,27 @@ route.get("/:id", authenticateToken, async (req, res) => {
     res.status(200).json(post);
   } catch (err) {
     res.status(400).send("Server Error");
+  }
+});
+
+route.delete("/:id", authenticateToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    console.log(post.user, "ffff", req.user._id);
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    // Check user
+    if (post.user.toString() !== req.user._id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+    await post.remove();
+
+    res.json({ msg: "Post removed" });
+  } catch (err) {
+    res.status(400).send(err.message);
   }
 });
 

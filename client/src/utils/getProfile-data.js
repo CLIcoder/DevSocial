@@ -19,7 +19,11 @@ export const getProfileData = async (_id = undefined) => {
   const { data } = await axios.get(
     `https://api.github.com/users/${github}/repos?per_page=5`
   );
-  userData = { ...userData, repos: data };
+  userData = {
+    image: `https://avatars.githubusercontent.com/${userData.github}`,
+    ...userData,
+    repos: data,
+  };
 
   return userData;
 };

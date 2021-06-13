@@ -6,12 +6,32 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users",
   },
+  image: String,
+  name: String,
   content: {
     type: String,
     require: true,
   },
-  comments: [{ id: String, content: String }],
-  likes: [{ id: String, content: Boolean }],
+  comments: [
+    {
+      id: String,
+      status: String,
+      image: String,
+      name: String,
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
+  likes: {
+    amount: Number,
+    users: [{ id: String, status: Boolean }],
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Profile = model("Post", schema);

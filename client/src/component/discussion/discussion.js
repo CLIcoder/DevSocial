@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { getProfileData } from "../../utils/getProfile-data";
+import { getUserData } from "../../utils/getUser-data";
 
-const Discussion = ({ location: { customNameData: id } }) => {
-  const [posting, setPosting] = useState();
-  const [comment, setComment] = useState([{ content: "no comment" }]);
-  const [post, setPost] = useState("");
+const Discussion = ({ location: { customNameData } }) => {
+  const [userElem, setUserElem] = useState({});
+  const [post, setPosting] = useState("");
+  const [commentData, setCommentData] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,11 +17,15 @@ const Discussion = ({ location: { customNameData: id } }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("json data", JSON.stringify({ comments: posting }));
     axios
       .post(
-        `http://localhost:5000/api/posts/comment/${id}`,
-        JSON.stringify({ id: "dddddddddd", content: posting }),
+        `http://localhost:5000/api/posts/comment/${customNameData._id}`,
+        JSON.stringify({
+          id: userElem.id,
+          status: post,
+          image: userElem.image,
+          name: userElem.name,
+        }),
         {
           headers: {
             authorisation: window.localStorage.getItem("authorisation"),
@@ -27,27 +33,32 @@ const Discussion = ({ location: { customNameData: id } }) => {
           },
         }
       )
-      .then((res) => getComment())
+      .then(() => getData())
       .catch((err) => console.log("error in submiting data", err));
   };
 
   // fetching the comment from mongodb by using id as a params
-  const getComment = () => {
+  const getData = async () => {
+    const { image } = await getProfileData();
+    const { _id, name } = getUserData();
+
+    setUserElem({ image, _id, name });
+
     axios
-      .get(`http://localhost:5000/api/posts/${id}`, {
+      .get(`http://localhost:5000/api/posts/${customNameData._id}`, {
         headers: {
           authorisation: window.localStorage.getItem("authorisation"),
           "Content-Type": "application/json",
         },
       })
-      .then(({ data: { comments, content } }) => {
-        setComment([...comments]);
-        setPost(content);
+      .then(({ data: { comments } }) => {
+        setCommentData([...comments]);
         return;
-      });
+      })
+      .catch(() => alert("sicko mode"));
   };
 
-  useEffect(getComment, []);
+  useEffect(getData, [commentData.length]);
   return (
     <section className="container">
       <a href="posts.html" className="btn">
@@ -56,16 +67,12 @@ const Discussion = ({ location: { customNameData: id } }) => {
       <div className="post bg-white p-1 my-1">
         <div>
           <a href="profile.html">
-            <img
-              className="round-img"
-              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-              alt=""
-            />
-            <h4>John Doe</h4>
+            <img className="round-img" src={customNameData.image} alt="" />
+            <h4>{userElem.name}</h4>
           </a>
         </div>
         <div>
-          <p className="my-1">{post}</p>
+          <p className="my-1">{customNameData.content}</p>
         </div>
       </div>
 
@@ -86,29 +93,22 @@ const Discussion = ({ location: { customNameData: id } }) => {
       </div>
 
       <div className="comments">
-        {comment.map(({ content: data }, indx) => {
+        {commentData.map(({ image, name, status, date }, indx) => {
           return (
-            <>
-              <div
-                key={Math.random() + indx}
-                className="post bg-white p-1 my-1"
-              >
+            <div key={Math.random() + indx}>
+              <div className="post bg-white p-1 my-1">
                 <div>
                   <a href="profile.html">
-                    <img
-                      className="round-img"
-                      src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200"
-                      alt=""
-                    />
-                    <h4>John Doe</h4>
+                    <img className="round-img" src={image} alt="" />
+                    <h4>{name}</h4>
                   </a>
                 </div>
                 <div>
-                  <p className="my-1">{data}</p>
-                  <p className="post-date">Posted on 04/16/2019</p>
+                  <p className="my-1">{status}</p>
+                  <p className="post-date">{date}</p>
                 </div>
               </div>
-            </>
+            </div>
           );
         })}
       </div>

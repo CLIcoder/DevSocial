@@ -11,10 +11,7 @@ const DisplayProfile = ({ location: { customNameData } }) => {
     setUserData({ ...userData });
   };
 
-  useEffect(() => {
-    displayData();
-    return;
-  }, []);
+  useEffect(displayData, []);
 
   return (
     <>
