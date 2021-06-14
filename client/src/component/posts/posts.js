@@ -92,7 +92,7 @@ const Posts = () => {
       </p>
 
       <div className="post-form">
-        <div className="bg-primary p">
+        <div className="bg-primary p say">
           <h3>Say Something...</h3>
         </div>
         <form onSubmit={handleSubmit} noValidate className="form my-1">
@@ -101,9 +101,15 @@ const Posts = () => {
             cols="30"
             rows="5"
             placeholder="Create a post"
+            className="form-control"
+            id="exampleFormControlTextarea1"
             onChange={handleChange}
           ></textarea>
-          <input type="submit" className="btn btn-dark my-1" value="Submit" />
+          <input
+            type="submit"
+            className="btn btn-dark my-1 btn-add "
+            value="Submit"
+          />
         </form>
       </div>
 
@@ -155,7 +161,11 @@ const Posts = () => {
                             pathname: `/discussion/${_id}/${content}/${encodedUrl}`,
                           });
                         }}
-                        className="btn btn-primary"
+                        style={{
+                          color: "white",
+                          opacity: 0.9,
+                        }}
+                        className="btn btn-info "
                       >
                         Discussion
                         <span className="comment-count">{comments.length}</span>
@@ -169,7 +179,7 @@ const Posts = () => {
                             }
                           }}
                           type="button"
-                          className="btn btn-danger"
+                          className="btn btn-danger mx-4"
                         >
                           <i className="fas fa-times"></i>
                         </button>

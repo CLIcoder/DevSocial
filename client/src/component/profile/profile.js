@@ -64,8 +64,6 @@ const CreateProfile = ({ location: { customNameData } }) => {
       setFiledError({ ...error });
       return;
     }
-
-    console.log("testing", JSON.stringify({ ...field, skills: [...skill] }));
     setLoader(true);
 
     await axios

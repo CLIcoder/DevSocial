@@ -111,7 +111,13 @@ const CreateExperience = ({ location: { customNameData } }) => {
               ></textarea>
               <div style={{ color: "red" }}>{error.description}</div>
             </div>
-            <button type="submit" className="btn btn-primary float-right">
+            <button
+              style={{
+                marginTop: "-50px",
+              }}
+              type="submit"
+              className="btn btn-primary float-right"
+            >
               Submit
             </button>
           </form>

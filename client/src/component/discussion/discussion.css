@@ -1,0 +1,28 @@
+.say {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.733);
+  color: black;
+}
+.btn-add {
+  margin-left: 60px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  background-color: rgba(6, 6, 24, 0.534);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: rgba(6, 6, 24, 0.822);
+}
+
+.margin {
+  margin-bottom: 80px;
+  color: white;
+}

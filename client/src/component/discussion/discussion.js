@@ -4,6 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { getProfileData } from "../../utils/getProfile-data";
 import { getUserData } from "../../utils/getUser-data";
 import Loader from "../laoder/loader.component";
+import "./discussion.css";
 
 const Discussion = () => {
   //gettting params from url for data display
@@ -70,8 +71,8 @@ const Discussion = () => {
   useEffect(getData, [commentData.length]);
   return (
     <section className="container">
-      <a onClick={() => history.push("/posts")} className="btn">
-        Back To Posts
+      <a onClick={() => history.push("/posts")} className="btn btn-info margin">
+        ⬅️ Back To Posts
       </a>
       <div className="post bg-white p-1 my-1">
         <div>
@@ -92,13 +93,15 @@ const Discussion = () => {
 
       <div className="post-form">
         <div className="bg-primary p">
-          <h3>Leave A Comment</h3>
+          <h3 className="say">Leave A Comment</h3>
         </div>
         <form onSubmit={handleSubmit} className="form my-1">
           <textarea
             name="posting"
             cols="30"
             rows="5"
+            className="form-control"
+            id="exampleFormControlTextarea1"
             placeholder="Comment on this post"
             onChange={handleChange}
           ></textarea>

@@ -79,7 +79,6 @@ route.get("/:id", authenticateToken, async (req, res) => {
 route.delete("/:id", authenticateToken, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    console.log(post.user, "ffff", req.user._id);
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
     }
