@@ -1,11 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import { getProfileData } from "../../utils/getProfile-data";
 import { getUserData } from "../../utils/getUser-data";
+import Loader from "../laoder/loader.component";
 
-const Discussion = ({ location: { customNameData } }) => {
+const Discussion = () => {
+  //gettting params from url for data display
+  const customNameData = useParams();
+
+  const history = useHistory();
+
   const [userElem, setUserElem] = useState({});
   const [post, setPosting] = useState("");
+  const [loader, setLoader] = useState(true);
   const [commentData, setCommentData] = useState([]);
 
   const handleChange = (e) => {
@@ -52,26 +60,32 @@ const Discussion = ({ location: { customNameData } }) => {
         },
       })
       .then(({ data: { comments } }) => {
+        setLoader(false);
         setCommentData([...comments]);
         return;
       })
-      .catch(() => alert("sicko mode"));
+      .catch((err) => console.log(err));
   };
 
   useEffect(getData, [commentData.length]);
   return (
     <section className="container">
-      <a href="posts.html" className="btn">
+      <a onClick={() => history.push("/posts")} className="btn">
         Back To Posts
       </a>
       <div className="post bg-white p-1 my-1">
         <div>
           <a href="profile.html">
-            <img className="round-img" src={customNameData.image} alt="" />
+            <img
+              className="round-img"
+              src={decodeURIComponent(customNameData.image)}
+              alt=""
+            />
             <h4>{userElem.name}</h4>
           </a>
         </div>
         <div>
+          <h3>Posted by {userElem.name}</h3>
           <p className="my-1">{customNameData.content}</p>
         </div>
       </div>
@@ -93,24 +107,28 @@ const Discussion = ({ location: { customNameData } }) => {
       </div>
 
       <div className="comments">
-        {commentData.map(({ image, name, status, date }, indx) => {
-          return (
-            <div key={Math.random() + indx}>
-              <div className="post bg-white p-1 my-1">
-                <div>
-                  <a href="profile.html">
-                    <img className="round-img" src={image} alt="" />
-                    <h4>{name}</h4>
-                  </a>
-                </div>
-                <div>
-                  <p className="my-1">{status}</p>
-                  <p className="post-date">{date}</p>
+        {loader ? (
+          <Loader />
+        ) : (
+          commentData.map(({ image, name, status, date }, indx) => {
+            return (
+              <div key={Math.random() + indx}>
+                <div className="post bg-white p-1 my-1">
+                  <div>
+                    <a href="profile.html">
+                      <img className="round-img" src={image} alt="" />
+                      <h4>{name}</h4>
+                    </a>
+                  </div>
+                  <div>
+                    <p className="my-1">{status}</p>
+                    <p className="post-date">{date.split("T")[0]}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </section>
   );

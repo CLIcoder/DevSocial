@@ -51,7 +51,7 @@ const Profiles = () => {
                       <a
                         onClick={() =>
                           history.push({
-                            pathname: "/display-profile",
+                            pathname: "/display-developers",
                             customNameData: user,
                           })
                         }

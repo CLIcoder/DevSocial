@@ -35,7 +35,7 @@ const Dashboard = () => {
               <i className="fas fa-user"></i> Welcome {userdata.name}
             </p>
             {Object.entries(profile).length === 0 ? (
-              <button onClick={() => history.push("/create-profile")}>
+              <button onClick={() => history.push("/profile")}>
                 create profile
               </button>
             ) : (
@@ -51,7 +51,7 @@ const Dashboard = () => {
               <a
                 onClick={() =>
                   history.push({
-                    pathname: "/create-profile",
+                    pathname: "/profile",
                     customNameData: "edit profile",
                   })
                 }
@@ -60,13 +60,23 @@ const Dashboard = () => {
                 <i className="fas fa-user-circle text-primary"></i> Edit Profile
               </a>
               <a
-                onClick={() => history.push("/create-experience")}
+                onClick={() =>
+                  history.push({
+                    pathname: "/experience",
+                    customNameData: "add experience",
+                  })
+                }
                 className="btn btn-light"
               >
                 <i className="fab fa-black-tie text-primary"></i> Add Experience
               </a>
               <a
-                onClick={() => history.push("/create-education")}
+                onClick={() =>
+                  history.push({
+                    pathname: "/education",
+                    customNameData: "add education",
+                  })
+                }
                 className="btn btn-light"
               >
                 <i className="fas fa-graduation-cap text-primary"></i> Add

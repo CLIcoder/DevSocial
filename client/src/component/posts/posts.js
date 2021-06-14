@@ -4,6 +4,7 @@ import axios from "axios";
 import "./posts.css";
 import { getUserData } from "../../utils/getUser-data";
 import { getProfileData } from "../../utils/getProfile-data";
+import Loader from "../laoder/loader.component";
 
 const Posts = () => {
   const history = useHistory();
@@ -56,7 +57,9 @@ const Posts = () => {
       .then(() => getPosts());
   };
 
-  const getPosts = () => {
+  const getPosts = async () => {
+    const checkProfile = await getProfileData();
+    if (!checkProfile) history.push("/Dashboard");
     axios
       .get("http://localhost:5000/api/posts", {
         headers: {
@@ -105,71 +108,80 @@ const Posts = () => {
       </div>
 
       <div className="posts">
-        {posts.map(
-          (
-            {
-              content,
-              likes: { amount },
-              comments,
-              _id,
-              image,
-              name,
-              date,
-              user,
-            },
-            indx
-          ) => {
-            return (
-              <div key={Math.random() + indx + Math.random()}>
-                <div
-                  key={Math.random() + indx + Math.random()}
-                  className="post bg-white p-1 my-1"
-                >
-                  <div>
-                    <a href="profile.html">
-                      <img className="round-img" src={image} alt="" />
-                      <h4>{name}</h4>
-                    </a>
-                  </div>
-                  <div>
-                    <p className="my-1">{content}</p>
-                    <p className="post-date">{date}</p>
-                    <button
-                      onClick={() => addLike(_id)}
-                      type="button"
-                      className="btn btn-light"
-                    >
-                      <i className="fas fa-thumbs-up"></i>
-                      <span>{amount}</span>
-                    </button>
-                    <a
-                      onClick={() =>
-                        history.push({
-                          pathname: `/discussion`,
-                          customNameData: { _id, content, image },
-                        })
-                      }
-                      className="btn btn-primary"
-                    >
-                      Discussion
-                      <span className="comment-count">{comments.length}</span>
-                    </a>
-                    {user.toString() === getUserData()._id ? (
+        {posts.length === 0 ? (
+          <Loader />
+        ) : (
+          posts.map(
+            (
+              {
+                content,
+                likes: { amount },
+                comments,
+                _id,
+                image,
+                name,
+                date,
+                user,
+              },
+              indx
+            ) => {
+              return (
+                <div key={Math.random() + indx + Math.random()}>
+                  <div
+                    key={Math.random() + indx + Math.random()}
+                    className="post bg-white p-1 my-1"
+                  >
+                    <div>
+                      <a href="profile.html">
+                        <img className="round-img" src={image} alt="" />
+                        <h4>{name}</h4>
+                      </a>
+                    </div>
+                    <div>
+                      <p className="my-1">{content}</p>
+                      <p className="post-date">{date.split("T")[0]}</p>
                       <button
-                        onClick={() => removePost(_id)}
+                        onClick={() => addLike(_id)}
                         type="button"
-                        className="btn btn-danger"
+                        className="btn btn-light"
                       >
-                        <i className="fas fa-times"></i>
+                        <i className="fas fa-thumbs-up"></i>
+                        <span>{amount}</span>
                       </button>
-                    ) : (
-                      ""
-                    )}
+                      <a
+                        onClick={() => {
+                          const encodedUrl = encodeURIComponent(image);
+                          history.push({
+                            pathname: `/discussion/${_id}/${content}/${encodedUrl}`,
+                          });
+                        }}
+                        className="btn btn-primary"
+                      >
+                        Discussion
+                        <span className="comment-count">{comments.length}</span>
+                      </a>
+                      {user.toString() === getUserData()._id ? (
+                        <button
+                          onClick={async () => {
+                            if (window.confirm("Delete the item?")) {
+                              await removePost(_id);
+                              return;
+                            }
+                          }}
+                          type="button"
+                          className="btn btn-danger"
+                        >
+                          <i className="fas fa-times"></i>
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          }
+              );
+            }
+          )
         )}
       </div>
     </section>

@@ -7,15 +7,6 @@ import Loader from "../laoder/loader.component";
 import { getProfileData } from "../../utils/getProfile-data";
 
 const CreateProfile = ({ location: { customNameData } }) => {
-  /** reload confirmation for data persistance */
-  window.addEventListener("beforeunload", function (e) {
-    // Cancel the event
-    e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-    // Chrome requires returnValue to be set
-    e.returnValue = "";
-  });
-  /** reload confirmation for data persistance */
-
   const history = useHistory();
   const [skill, setskill] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -88,11 +79,17 @@ const CreateProfile = ({ location: { customNameData } }) => {
           },
         }
       )
-      .then(() => history.push("/create-experience"))
+      .then(() => history.push("/experience"))
       .catch((err) => console.log(err.message));
+  };
+  const check = async () => {
+    const userData = await getProfileData();
+    if (userData && !customNameData) history.push("/Dashboard");
   };
   const displayData = async () => {
     const userData = await getProfileData();
+    if (userData && !customNameData) history.push("/Dashboard");
+
     setFiled({
       displayName: userData.displayName,
       company: userData.company,
@@ -105,6 +102,7 @@ const CreateProfile = ({ location: { customNameData } }) => {
     setskill([...userData.skills]);
   };
   useEffect(() => {
+    check();
     if (customNameData) {
       displayData();
       return;
@@ -247,9 +245,8 @@ const CreateProfile = ({ location: { customNameData } }) => {
                   ></textarea>
                   <div style={{ color: "red" }}>{fieldError.bio}</div>
                 </div>
-
                 <button type="submit" className="btn btn-primary float-right">
-                  Next ⏭️
+                  Submit
                 </button>
               </form>
             </div>

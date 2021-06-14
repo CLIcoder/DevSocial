@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Loader from "../laoder/loader.component";
 
-const CreateExperience = () => {
+const CreateExperience = ({ location: { customNameData } }) => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const [field, setField] = useState({
@@ -50,7 +50,7 @@ const CreateExperience = () => {
           },
         }
       )
-      .then(() => history.push("display-profile"))
+      .then(() => history.push("/developers"))
       .catch((err) => console.log(err));
   };
   return (
@@ -111,8 +111,8 @@ const CreateExperience = () => {
               ></textarea>
               <div style={{ color: "red" }}>{error.description}</div>
             </div>
-            <button type="submit" className="btn btn-primary float-middle">
-              Submit ✔️
+            <button type="submit" className="btn btn-primary float-right">
+              Submit
             </button>
           </form>
         </div>

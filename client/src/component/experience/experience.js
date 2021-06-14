@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Loader from "../laoder/loader.component";
 
-const CreateExperience = () => {
+const CreateExperience = ({ location: { customNameData } }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [field, setField] = useState({
@@ -50,7 +50,7 @@ const CreateExperience = () => {
           },
         }
       )
-      .then(() => history.push("/create-education"))
+      .then(() => history.push("/education"))
       .catch((err) => console.log(err));
   };
 
@@ -124,11 +124,8 @@ const CreateExperience = () => {
               <div style={{ color: "red" }}>{error.description}</div>
             </div>
             <button type="submit" className="btn btn-primary float-right">
-              Next ⏭️
+              Submit
             </button>
-            <a className="btn btn-light my-1" href="dashboard.html">
-              Go Back
-            </a>
           </form>
         </div>
       ) : (
