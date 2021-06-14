@@ -5,11 +5,13 @@ import "./posts.css";
 import { getUserData } from "../../utils/getUser-data";
 import { getProfileData } from "../../utils/getProfile-data";
 import Loader from "../laoder/loader.component";
+import { likeStatus } from "../../utils/likeStatus";
 
 const Posts = () => {
   const history = useHistory();
   const [content, setContent] = useState();
   const [posts, setPosts] = useState([]);
+  const [likesId, setLikesId] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,6 +63,8 @@ const Posts = () => {
   };
 
   const getPosts = async () => {
+    const { _id } = getUserData();
+    setLikesId(_id);
     const checkProfile = await getProfileData();
     if (!checkProfile) history.push("/Dashboard");
     axios
@@ -124,7 +128,7 @@ const Posts = () => {
             (
               {
                 content,
-                likes: { amount },
+                likes: { amount, users },
                 comments,
                 _id,
                 image,
@@ -141,10 +145,10 @@ const Posts = () => {
                     className="post bg-white p-1 my-1"
                   >
                     <div>
-                      <a href="profile.html">
+                      <a href={`https://github.com/${image.split("/")[3]}`}>
                         <img className="round-img" src={image} alt="" />
-                        <h4>{name}</h4>
                       </a>
+                      <p>{name}</p>
                     </div>
                     <div>
                       <p className="my-1">{content}</p>
@@ -154,7 +158,12 @@ const Posts = () => {
                         type="button"
                         className="btn btn-light"
                       >
-                        <i className="fas fa-thumbs-up"></i>
+                        <i
+                          style={{
+                            color: likeStatus(users, likesId),
+                          }}
+                          className="fas fa-thumbs-up "
+                        ></i>
                         <span>{amount}</span>
                       </button>
                       <a

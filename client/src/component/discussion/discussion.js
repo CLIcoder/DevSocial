@@ -82,7 +82,6 @@ const Discussion = () => {
               src={decodeURIComponent(customNameData.image)}
               alt=""
             />
-            <h4>{userElem.name}</h4>
           </a>
         </div>
         <div>
@@ -118,10 +117,11 @@ const Discussion = () => {
               <div key={Math.random() + indx}>
                 <div className="post bg-white p-1 my-1">
                   <div>
-                    <a href="profile.html">
+                    <a href={`https://github.com/${image.split("/")[3]}`}>
                       <img className="round-img" src={image} alt="" />
-                      <h4>{name}</h4>
+                      {/** spliting image data to get github user, I'm lazzy as fuck, I know! 😅 */}
                     </a>
+                    <p>{name}</p>
                   </div>
                   <div>
                     <p className="my-1">{status}</p>
