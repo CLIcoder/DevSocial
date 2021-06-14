@@ -59,7 +59,7 @@ const CreateProfile = ({ location: { customNameData } }) => {
 
   const submitData = async (e) => {
     e.preventDefault();
-    const error = createProfileValidation({ ...field, skills: skill });
+    const error = await createProfileValidation({ ...field, skills: skill });
     if (error) {
       setFiledError({ ...error });
       return;

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { getProfileData } from "../../utils/getProfile-data";
 import Loader from "../laoder/loader.component";
 
 const DisplayProfile = ({ location: { customNameData } }) => {
   //location us a prop data for other users to see their profile when not LoggedIn
   const [userData, setUserData] = useState({});
+  const history = useHistory();
 
   const displayData = async () => {
     const userData = await getProfileData(customNameData);
@@ -17,7 +19,12 @@ const DisplayProfile = ({ location: { customNameData } }) => {
     <>
       {Object.entries(userData).length > 0 ? (
         <section className="container">
-          <a className="btn btn-light">Back To Profiles</a>
+          <a
+            onClick={() => history.push("/developers")}
+            className="btn btn-light"
+          >
+            Back To Profiles
+          </a>
 
           <div className="profile-grid my-1">
             <div className="profile-top  p-2">
@@ -38,10 +45,9 @@ const DisplayProfile = ({ location: { customNameData } }) => {
             </div>
 
             <div className="profile-about bg-light p-2">
-              <h2 className="text-primary">{userData.displayName} Bio</h2>
               <p>{userData.bio}</p>
               <div className="line"></div>
-              <h2 className="text-primary">Skill Set</h2>
+              <h2 className="text-primary">Skill Set </h2>
               <div className="skills d-flex">
                 {userData.skills.map((elem, indx) => {
                   return (
@@ -54,17 +60,14 @@ const DisplayProfile = ({ location: { customNameData } }) => {
             </div>
 
             <div className="profile-exp bg-white p-2">
-              <h2 className="text-primary">Experience</h2>
+              <h2 className="text-primary my-4">Experience </h2>
               {userData.experience.length === 0 ? (
                 <h1>No experience Found!</h1>
               ) : (
                 ""
               )}
               {userData.experience.map(
-                (
-                  { current, title, company, location, from, to, description },
-                  indx
-                ) => {
+                ({ current, title, company, from, to, description }, indx) => {
                   return (
                     <div key={Math.random() + indx}>
                       <h3 className="text-dark">{title}</h3>
@@ -91,7 +94,7 @@ const DisplayProfile = ({ location: { customNameData } }) => {
             </div>
 
             <div className="profile-edu bg-white p-2">
-              <h2 className="text-primary">Education</h2>
+              <h2 className="text-primary my-4">Education</h2>
               {userData.education.length === 0 ? (
                 <h1>No education Found!</h1>
               ) : (
@@ -139,9 +142,9 @@ const DisplayProfile = ({ location: { customNameData } }) => {
               )}
             </div>
 
-            <div className="profile-github">
+            <div className="profile-github my-4">
               <h2 className="text-primary my-1">
-                <i className="fab fa-github"></i> Github Repos
+                <i className="fab fa-github my-4"></i> Github Repos
               </h2>
               {userData.repos.length === 0 ? <h1>No repo Found!</h1> : ""}
               {userData.repos.map(
@@ -152,6 +155,7 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                     name,
                     description,
                     stargazers_count,
+                    html_url,
                   },
                   indx
                 ) => {
@@ -160,9 +164,16 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                       key={Math.random() + indx}
                       className="repo bg-white p-1 my-1"
                     >
-                      <div>
+                      <div key={Math.random() + indx}>
                         <h4>
-                          <a>{name}</a>
+                          <a
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            href={html_url}
+                          >
+                            {name}
+                          </a>
                         </h4>
                         <p>
                           {description ? description : "No decrption found!"}

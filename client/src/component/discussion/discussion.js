@@ -87,7 +87,7 @@ const Discussion = () => {
         </div>
         <div>
           <h3>Posted by {userElem.name}</h3>
-          <p className="my-1">{customNameData.content}</p>
+          <p className="my-1">{decodeURIComponent(customNameData.content)}</p>
         </div>
       </div>
 

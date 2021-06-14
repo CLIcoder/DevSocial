@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Redirect } from "react-router-dom";
 
 //component
 import SignIn from "./component/auth/signin";
@@ -39,6 +39,7 @@ const App = () => {
         <LoggedIn path="/Dashboard" component={Dashboard} />
         <LoggedIn path="/posts" component={Posts} />
         <LoggedIn
+          exact
           path="/discussion/:_id/:content/:image"
           component={Discussion}
         />

@@ -1,4 +1,6 @@
-export const createProfileValidation = ({
+import axios from "axios";
+
+export const createProfileValidation = async ({
   displayName,
   company,
   website,
@@ -9,9 +11,13 @@ export const createProfileValidation = ({
 }) => {
   let error = {};
 
+  await axios
+    .get(`https://api.github.com/users/${github}`)
+    .catch(() => (error.github = "Provide a real github account"));
+
   if (displayName.length < 2 || displayName.length > 100)
     error.displayName = "Please provide a valid display name";
-  if (github.length < 2 || github.length > 15)
+  if (github.length < 2 || github.length > 100)
     error.github = "Please Provide a valid github username";
   if (location.length < 2 || location.length > 20)
     error.location = "Please provide a valide location";

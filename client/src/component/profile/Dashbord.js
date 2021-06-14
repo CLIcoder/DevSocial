@@ -102,7 +102,8 @@ const Dashboard = () => {
                         <td>{company}</td>
                         <td className="hide-sm">{title}</td>
                         <td className="hide-sm">
-                          {from} {to.length === 0 ? "" : "->" + to}
+                          {from}{" "}
+                          {to.length === 0 ? "-> (Current Job)" : "->" + to}
                         </td>
                         <td>
                           <button

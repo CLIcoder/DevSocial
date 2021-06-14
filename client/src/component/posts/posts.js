@@ -38,7 +38,10 @@ const Posts = () => {
           },
         }
       )
-      .then(() => getPosts());
+      .then(() => {
+        setContent("");
+        getPosts();
+      });
   };
 
   const addLike = (_id) => {
@@ -156,9 +159,13 @@ const Posts = () => {
                       </button>
                       <a
                         onClick={() => {
-                          const encodedUrl = encodeURIComponent(image);
+                          const encodedUrl_image = encodeURIComponent(image);
+                          const encodedUrl_id = encodeURIComponent(_id);
+                          const encodedUrl_content =
+                            encodeURIComponent(content);
+
                           history.push({
-                            pathname: `/discussion/${_id}/${content}/${encodedUrl}`,
+                            pathname: `/discussion/${encodedUrl_id}/${encodedUrl_content}/${encodedUrl_image}`,
                           });
                         }}
                         style={{

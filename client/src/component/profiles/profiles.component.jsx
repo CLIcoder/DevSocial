@@ -30,7 +30,7 @@ const Profiles = () => {
           <i className="fab fa-connectdevelop"></i> Browse and connect with
           developers
         </p>
-        <div className="profiles">
+        <div key={Math.random()} div className="profiles">
           {Object.entries(profiles).length > 0 ? (
             profiles.map(
               (
@@ -38,7 +38,10 @@ const Profiles = () => {
                 indx
               ) => {
                 return (
-                  <div key={Math.random() + indx} className="profile bg-light">
+                  <div
+                    key={Math.random() + indx + Math.random()}
+                    className="profile bg-light"
+                  >
                     <img
                       className="round-img"
                       src={`https://avatars.githubusercontent.com/${github}`}
@@ -47,6 +50,7 @@ const Profiles = () => {
                     <div>
                       <h2>{displayName}</h2>
                       <p>{company}</p>
+                      <a href={`https://github.com/${github}`}>Github Link</a>
                       <p>{location}</p>
                       <a
                         onClick={() =>
