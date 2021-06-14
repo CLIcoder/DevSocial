@@ -24,6 +24,10 @@ const Discussion = () => {
     return;
   };
 
+  {
+    /** TODO: Implement search and pagination */
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios

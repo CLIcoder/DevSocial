@@ -21,6 +21,10 @@ const Posts = () => {
     return;
   };
 
+  {
+    /** TODO: Implement search and pagination */
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { _id, name } = getUserData();

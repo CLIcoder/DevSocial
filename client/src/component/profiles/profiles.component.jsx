@@ -17,6 +17,11 @@ const Profiles = () => {
     return;
   };
 
+  const handleChange = (e) => {
+    const { value } = e.target;
+    // create a search api and get back result on each input paginated
+  };
+
   useEffect(() => {
     getProfiles();
     return;
@@ -26,6 +31,20 @@ const Profiles = () => {
     <>
       <section className="container">
         <h1 className="large text-primary">Developers</h1>
+        <div class="form-outline">
+          <input
+            onChange={handleChange}
+            name="search"
+            type="search"
+            id="form1"
+            class="form-control"
+          />
+          <label class="form-label" for="form1">
+            Search
+          </label>
+        </div>
+        {/** TODO: Implement search and pagination */}
+
         <p className="lead">
           <i className="fab fa-connectdevelop"></i> Browse and connect with
           developers
