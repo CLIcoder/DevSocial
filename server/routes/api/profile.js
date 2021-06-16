@@ -10,7 +10,9 @@ import User from "../../model/Users/User.js";
 
 const route = Router();
 
-// get individual profile
+// @route   get api/profile
+// @desc    get one profile
+// @access  Private
 
 route.get("/:id", async (req, res) => {
   try {
@@ -24,7 +26,9 @@ route.get("/:id", async (req, res) => {
   }
 });
 
-// get all profile that are inside the Router
+// @route   get api/profile
+// @desc    get all profiles
+// @access  Public
 
 route.get("/", async (req, res) => {
   try {
@@ -115,6 +119,11 @@ route.post("/experience", authenticateToken, async (req, res) => {
     res.status(400).send(err.message);
   }
 });
+
+// @route   POST api/profile/education
+// @desc    Add education
+// @access  Private
+
 route.post("/education", authenticateToken, async (req, res) => {
   try {
     //validate experience data
@@ -162,8 +171,9 @@ route.delete("/experience/:exp_id", authenticateToken, async (req, res) => {
   }
 });
 
-// @desc     Delete a eduction
+// @desc     Delete a education
 // @access   Private
+
 route.delete("/education/:edu_id", authenticateToken, async (req, res) => {
   try {
     const foundProfile = await Profile.findOne({ user: req.user._id });
@@ -182,11 +192,9 @@ route.delete("/education/:edu_id", authenticateToken, async (req, res) => {
 // @route    DELETE api/profile
 // @desc     Delete profile, user & posts
 // @access   Private
+
 route.delete("/", authenticateToken, async (req, res) => {
   try {
-    // Remove user posts
-    // Remove profile
-    // Remove user
     await Promise.all([
       Profile.findOneAndRemove({ user: req.user._id }),
       User.findOneAndRemove({ _id: req.user._id }),

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import axios from "axios";
 
 import { signInValidation } from "../../utils/formValidation";
 
 const SignIn = () => {
+  const history = useHistory();
   const [field, setFiled] = useState({
     email: "",
     password: "",
@@ -71,7 +73,17 @@ const SignIn = () => {
                   value={field.password}
                   onChange={handleChange}
                 />
+
                 <div style={{ color: "red" }}>{error.password}</div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <u></u>
+
+                  <u>
+                    <a href="" onClick={() => history.push("/forget-password")}>
+                      forget password ?
+                    </a>
+                  </u>
+                </div>
               </div>
               <input type="submit" className="btn btn-info btn-block mt-4" />
             </form>

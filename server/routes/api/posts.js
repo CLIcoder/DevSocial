@@ -5,16 +5,23 @@ import { countLikes, likeFunc } from "../../utils.js";
 
 const route = Router();
 
-// get all post
+// @route   GET api/posts
+// @desc    get all posts
+// @access  Private
+
 route.get("/", authenticateToken, async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
+    const posts = await Post.find();
     res.json(posts);
   } catch (err) {
     console.error(err.message);
     res.status(400).send("Server Error");
   }
 });
+
+// @route   POST api/posts
+// @desc    Add new post
+// @access  Private
 
 route.post("/", authenticateToken, async (req, res) => {
   try {
@@ -26,6 +33,11 @@ route.post("/", authenticateToken, async (req, res) => {
     res.status(400).send(err.message);
   }
 });
+
+// @route   POST api/posts/comment
+// @desc    Add comment to post
+// @access  Private
+
 route.post("/comment/:id", authenticateToken, async (req, res) => {
   try {
     Post.findOne({ _id: req.params.id }).then(({ comments }) => {
@@ -40,6 +52,11 @@ route.post("/comment/:id", authenticateToken, async (req, res) => {
     res.status(400).send(err.message);
   }
 });
+
+// @route   POST api/posts/like
+// @desc    Add like to post
+// @access  Private
+
 route.post("/like/:id", authenticateToken, async (req, res) => {
   try {
     Post.findOne({ _id: req.params.id }).then(({ likes: { users } }) => {
@@ -63,7 +80,10 @@ route.post("/like/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// get one post by id
+// @route   POST api/posts/
+// @desc    get post by id
+// @access  Private
+
 route.get("/:id", authenticateToken, async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.id });
@@ -75,6 +95,10 @@ route.get("/:id", authenticateToken, async (req, res) => {
     res.status(400).send("Server Error");
   }
 });
+
+// @route   POST api/posts/
+// @desc    delete post with id
+// @access  Private
 
 route.delete("/:id", authenticateToken, async (req, res) => {
   try {

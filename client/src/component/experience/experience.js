@@ -50,7 +50,7 @@ const CreateExperience = ({ location: { customNameData } }) => {
           },
         }
       )
-      .then(() => history.push("/education"))
+      .then(() => history.push("/Dashboard"))
       .catch((err) => console.log(err));
   };
 

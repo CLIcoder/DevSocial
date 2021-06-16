@@ -15,6 +15,7 @@ import Profiles from "./component/profiles/profiles.component";
 import Posts from "./component/posts/posts";
 import Discussion from "./component/discussion/discussion";
 import Home from "./pages/home";
+import ForgetPassword from "./component/forget-password/forget-password.component";
 
 //routes
 
@@ -22,6 +23,7 @@ import NotLoggedIn from "./utils/NotLoggedIn";
 import LoggedIn from "./utils/LoggedIn";
 
 import "./App.css";
+import NewPassword from "./component/new-password/new-password.component";
 
 const App = () => {
   return (
@@ -31,6 +33,8 @@ const App = () => {
         <NotLoggedIn exact path="/" component={Home} />
         <NotLoggedIn path="/signup" component={SignUp} />
         <NotLoggedIn path="/signin" component={SignIn} />
+        <NotLoggedIn path="/forget-password" component={ForgetPassword} />
+        <NotLoggedIn path="/new-password/:token" component={NewPassword} />
 
         <LoggedIn path="/profile" component={CreateProfile} />
         <LoggedIn path="/education" component={CreateEducation} />

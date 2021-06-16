@@ -77,7 +77,7 @@ const CreateProfile = ({ location: { customNameData } }) => {
           },
         }
       )
-      .then(() => history.push("/experience"))
+      .then(() => history.push("/Dashboard"))
       .catch((err) => console.log(err.message));
   };
   const check = async () => {

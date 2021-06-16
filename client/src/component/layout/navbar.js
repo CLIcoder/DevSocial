@@ -7,11 +7,13 @@ const Navbar = () => {
   const [avatar, setAvatar] = useState("");
 
   const displayData = async () => {
-    const userData = await getProfileData();
-    const { avatar } = getUserData();
-    if (!userData) setAvatar(avatar);
-    else {
-      setAvatar(`https://avatars.githubusercontent.com/${userData.github}`);
+    if (window.localStorage.getItem("authorisation")) {
+      const userData = await getProfileData();
+      const { avatar } = getUserData();
+      if (!userData) setAvatar(avatar);
+      else {
+        setAvatar(`https://avatars.githubusercontent.com/${userData.github}`);
+      }
     }
   };
 

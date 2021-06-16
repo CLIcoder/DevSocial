@@ -14,7 +14,7 @@ const Discussion = () => {
 
   const [userElem, setUserElem] = useState({});
   const [post, setPosting] = useState("");
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const [commentData, setCommentData] = useState([]);
 
   const handleChange = (e) => {
@@ -52,6 +52,7 @@ const Discussion = () => {
 
   // fetching the comment from mongodb by using id as a params
   const getData = async () => {
+    setLoader(true);
     const { image } = await getProfileData();
     const { _id, name } = getUserData();
 

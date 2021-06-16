@@ -5,9 +5,10 @@ import express from "express";
 import posts from "./routes/api/posts.js";
 import profile from "./routes/api/profile.js";
 import users from "./routes/api/users.js";
-import { URI } from "./config/keys.js";
 import mongoose from "mongoose";
 import authenticateToken from "./middlwares/auth-token.js";
+import dotenv from "dotenv";
+dotenv.config();
 import cors from "cors";
 
 const app = express();
@@ -21,7 +22,7 @@ app.use("/api/profile", profile);
 
 // you should use your own URI for mongodb connection
 mongoose
-  .connect(URI)
+  .connect(process.env.URI)
   .then(() => console.log("connected"))
   .catch((err) => console.log(err));
 
