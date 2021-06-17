@@ -26,6 +26,8 @@ route.get("/", authenticateToken, async (req, res) => {
 route.post("/", authenticateToken, async (req, res) => {
   try {
     const request = req.body;
+    if (request.content.length === 0 || req.body.content.length > 500)
+      throw err;
     const result = new Post({ user: req.user._id, ...request });
     await result.save();
     res.status(200).send("saved");
@@ -40,6 +42,7 @@ route.post("/", authenticateToken, async (req, res) => {
 
 route.post("/comment/:id", authenticateToken, async (req, res) => {
   try {
+    if (req.body.status.length === 0 || req.body.status.length > 500) throw err;
     Post.findOne({ _id: req.params.id }).then(({ comments }) => {
       const newArray = [...comments, { ...req.body }];
       Post.findOneAndUpdate(

@@ -32,11 +32,15 @@ const SignUp = () => {
       const { password2, ...valideData } = field;
       // register user
       await axios
-        .post("http://localhost:5000/api/users/signup", { ...valideData })
+        .post(`${process.env.REACT_APP_URL}/api/users/signup`, {
+          ...valideData,
+        })
         .then(async (res) => {
           // login the user
           await axios
-            .post("http://localhost:5000/api/users/signin", { ...res.data })
+            .post(`${process.env.REACT_APP_URL}/api/users/signin`, {
+              ...res.data,
+            })
             .then((res) => {
               window.localStorage.setItem("authorisation", res.data.tokens);
               window.location.reload();

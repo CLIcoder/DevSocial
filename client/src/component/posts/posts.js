@@ -9,10 +9,11 @@ import { likeStatus } from "../../utils/likeStatus";
 
 const Posts = () => {
   const history = useHistory();
-  const [content, setContent] = useState();
+  const [content, setContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [likesId, setLikesId] = useState("");
   const [loader, setLoader] = useState(true);
+  const [error, setError] = useState("");
 
   //pagination this.state
   const [pageNum, setPageNum] = useState(0);
@@ -44,12 +45,20 @@ const Posts = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (content.length === 0) {
+      setError("field should not be empty");
+      return;
+    }
+    if (content.length > 500) {
+      setError("500 limit caracter !");
+      return;
+    }
     setLoader(true);
     const { _id, name } = getUserData();
     const { image } = await getProfileData(_id);
     axios
       .post(
-        "http://localhost:5000/api/posts",
+        `${process.env.REACT_APP_URL}/api/posts`,
         JSON.stringify({
           image,
           name,
@@ -72,7 +81,7 @@ const Posts = () => {
     const { _id: userId } = getUserData();
     axios
       .post(
-        `http://localhost:5000/api/posts/like/${_id}`,
+        `${process.env.REACT_APP_URL}/api/posts/like/${_id}`,
         JSON.stringify({ id: userId }),
         {
           headers: {
@@ -90,22 +99,22 @@ const Posts = () => {
     const checkProfile = await getProfileData();
     if (!checkProfile) history.push("/Dashboard");
     axios
-      .get("http://localhost:5000/api/posts", {
+      .get(`${process.env.REACT_APP_URL}/api/posts`, {
         headers: {
           authorisation: window.localStorage.getItem("authorisation"),
           "Content-Type": "application/json",
         },
       })
       .then(({ data }) => {
-        console.log("data", data);
         if (data.length > 0) setPosts([...data].reverse());
+        if (data.length === 0) setPosts([]);
         setLoader(false);
         return;
       });
   };
   const removePost = (removeId) => {
     axios
-      .delete(`http://localhost:5000/api/posts/${removeId}`, {
+      .delete(`${process.env.REACT_APP_URL}/api/posts/${removeId}`, {
         headers: {
           authorisation: window.localStorage.getItem("authorisation"),
           "Content-Type": "application/json",
@@ -138,6 +147,7 @@ const Posts = () => {
               id="exampleFormControlTextarea1"
               onChange={handleChange}
             ></textarea>
+            <p style={{ color: "red" }}>{error}</p>
             {loader ? <Loader /> : ""}
             <input
               type="submit"
@@ -177,7 +187,14 @@ const Posts = () => {
                           <p>{name}</p>
                         </div>
                         <div>
-                          <p className="my-1">{content}</p>
+                          <em
+                            style={{
+                              wordBreak: "break-all",
+                            }}
+                          >
+                            {content}
+                          </em>
+
                           <p className="post-date">{date.split("T")[0]}</p>
                           <button
                             onClick={() => addLike(_id)}
@@ -192,7 +209,7 @@ const Posts = () => {
                             ></i>
                             <span>{amount}</span>
                           </button>
-                          <a
+                          <div
                             onClick={() => {
                               const encodedUrl_image =
                                 encodeURIComponent(image);
@@ -214,12 +231,12 @@ const Posts = () => {
                             <span className="comment-count">
                               {comments.length}
                             </span>
-                          </a>
+                          </div>
                           {user.toString() === getUserData()._id ? (
                             <button
-                              onClick={async () => {
+                              onClick={() => {
                                 if (window.confirm("Delete the item?")) {
-                                  await removePost(_id);
+                                  removePost(_id);
                                   return;
                                 }
                               }}

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Redirect } from "react-router-dom";
+import { HashRouter, Switch, Redirect } from "react-router-dom";
 
 //component
 import SignIn from "./component/auth/signin";
@@ -27,7 +27,7 @@ import NewPassword from "./component/new-password/new-password.component";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navbar />
       <Switch>
         <NotLoggedIn exact path="/" component={Home} />
@@ -52,7 +52,7 @@ const App = () => {
         <Redirect to="/Dashboard" />
       </Switch>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 

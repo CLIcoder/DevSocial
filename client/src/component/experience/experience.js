@@ -41,7 +41,7 @@ const CreateExperience = ({ location: { customNameData } }) => {
     setLoading(true);
     await axios
       .post(
-        "http://localhost:5000/api/profile/experience",
+        `${process.env.REACT_APP_URL}/api/profile/experience`,
         JSON.stringify(field),
         {
           headers: {

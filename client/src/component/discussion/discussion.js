@@ -16,6 +16,7 @@ const Discussion = () => {
   const [post, setPosting] = useState("");
   const [loader, setLoader] = useState(false);
   const [commentData, setCommentData] = useState([]);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,9 +31,17 @@ const Discussion = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (post.length === 0) {
+      setError("field should not be empty");
+      return;
+    }
+    if (post.length > 500) {
+      setError("500 limit caracter !");
+      return;
+    }
     axios
       .post(
-        `http://localhost:5000/api/posts/comment/${customNameData._id}`,
+        `${process.env.REACT_APP_URL}/api/posts/comment/${customNameData._id}`,
         JSON.stringify({
           id: userElem.id,
           status: post,
@@ -59,7 +68,7 @@ const Discussion = () => {
     setUserElem({ image, _id, name });
 
     axios
-      .get(`http://localhost:5000/api/posts/${customNameData._id}`, {
+      .get(`${process.env.REACT_APP_URL}/api/posts/${customNameData._id}`, {
         headers: {
           authorisation: window.localStorage.getItem("authorisation"),
           "Content-Type": "application/json",
@@ -81,7 +90,7 @@ const Discussion = () => {
       </a>
       <div className="post bg-white p-1 my-1">
         <div>
-          <a href="profile.html">
+          <a>
             <img
               className="round-img"
               src={decodeURIComponent(customNameData.image)}
@@ -109,6 +118,7 @@ const Discussion = () => {
             placeholder="Comment on this post"
             onChange={handleChange}
           ></textarea>
+          <p style={{ color: "red" }}>{error}</p>
           <input type="submit" className="btn btn-dark my-1" value="Submit" />
         </form>
       </div>
@@ -129,7 +139,13 @@ const Discussion = () => {
                     <p>{name}</p>
                   </div>
                   <div>
-                    <p className="my-1">{status}</p>
+                    <em
+                      style={{
+                        wordBreak: "break-all",
+                      }}
+                    >
+                      {status}
+                    </em>
                     <p className="post-date">{date.split("T")[0]}</p>
                   </div>
                 </div>

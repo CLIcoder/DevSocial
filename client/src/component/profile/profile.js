@@ -68,7 +68,7 @@ const CreateProfile = ({ location: { customNameData } }) => {
 
     await axios
       .post(
-        "http://localhost:5000/api/profile",
+        `${process.env.REACT_APP_URL}/api/profile`,
         JSON.stringify({ ...field, skills: [...skill] }),
         {
           headers: {

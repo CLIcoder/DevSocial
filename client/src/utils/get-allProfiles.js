@@ -2,7 +2,7 @@ import axios from "axios";
 
 const getAllProfiles = async () => {
   const { data: allProfiles } = await axios.get(
-    "http://localhost:5000/api/profile"
+    `${process.env.REACT_APP_URL}/api/profile`
   );
   return allProfiles;
 };

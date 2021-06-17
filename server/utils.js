@@ -25,7 +25,9 @@ export const countLikes = (arr) => {
 //mail sender function
 export const sendMail = (email, subject, text) => {
   const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_PROVIDER,
+    host: process.env.EMAIL_PROVIDER,
+    port: 465,
+    secure: true, // use SSL
     auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASSWORD,
@@ -40,5 +42,6 @@ export const sendMail = (email, subject, text) => {
   };
   transporter.sendMail(mailOptions, (error, res) => {
     if (error) console.log(error);
+    console.log(res);
   });
 };

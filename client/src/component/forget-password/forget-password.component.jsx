@@ -18,7 +18,7 @@ const ForgetPassword = () => {
     // calling the api with new JWT token
     axios
       .post(
-        "http://localhost:5000/api/users/token",
+        `${process.env.REACT_APP_URL}/api/users/token`,
         JSON.stringify({ email }),
         {
           headers: {

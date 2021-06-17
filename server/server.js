@@ -6,12 +6,13 @@ import posts from "./routes/api/posts.js";
 import profile from "./routes/api/profile.js";
 import users from "./routes/api/users.js";
 import mongoose from "mongoose";
-import authenticateToken from "./middlwares/auth-token.js";
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 
 const app = express();
+
+//
 
 //midllwares
 app.use(express.json());
@@ -29,9 +30,9 @@ mongoose
 // port setup
 const port = process.env.PORT || 5000;
 
-//testing a private route
-app.get("/admin", authenticateToken, (req, res) => {
-  res.json(req.user);
+//hello to api
+app.get("/", (req, res) => {
+  return res.status(200).send("hello to devsocial api");
 });
 
 //app listen connection stream

@@ -9,7 +9,7 @@ export const getProfileData = async (_id = undefined) => {
   //User Profile Data
   const { data: profileData } = await axios.get(
     // if the _id value is given it will be called else _userid will take place from display-profile props
-    `http://localhost:5000/api/profile/${_id || _userid}`
+    `${process.env.REACT_APP_URL}/api/profile/${_id || _userid}`
   );
   if (profileData === null) return false;
   userData = { ...profileData };

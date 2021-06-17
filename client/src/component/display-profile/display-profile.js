@@ -85,7 +85,14 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                       </p>
                       <p>
                         <strong>Description: </strong>
-                        {description}
+                        <em
+                          style={{
+                            wordBreak: "break-all",
+                            color: "gray",
+                          }}
+                        >
+                          {description}
+                        </em>
                       </p>
                     </div>
                   );
@@ -134,7 +141,14 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                       </p>
                       <p>
                         <strong>Description: </strong>
-                        {description}
+                        <em
+                          style={{
+                            wordBreak: "break-all",
+                            color: "gray",
+                          }}
+                        >
+                          {description}
+                        </em>
                       </p>
                     </div>
                   );
@@ -175,9 +189,14 @@ const DisplayProfile = ({ location: { customNameData } }) => {
                             {name}
                           </a>
                         </h4>
-                        <p>
+                        <em
+                          style={{
+                            wordBreak: "break-all",
+                            color: "gray",
+                          }}
+                        >
                           {description ? description : "No decrption found!"}
-                        </p>
+                        </em>
                       </div>
                       <div>
                         <ul>

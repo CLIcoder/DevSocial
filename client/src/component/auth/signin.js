@@ -30,7 +30,7 @@ const SignIn = () => {
     else {
       //login the user after signIn
       await axios
-        .post("http://localhost:5000/api/users/signin", { ...field })
+        .post(`${process.env.REACT_APP_URL}/api/users/signin`, { ...field })
         .then((res) => {
           // logging the user then redirecting to dashboard page
           window.localStorage.setItem("authorisation", res.data.tokens);
@@ -79,7 +79,12 @@ const SignIn = () => {
                   <u></u>
 
                   <u>
-                    <a href="" onClick={() => history.push("/forget-password")}>
+                    <a
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      onClick={() => history.push("/forget-password")}
+                    >
                       forget password ?
                     </a>
                   </u>

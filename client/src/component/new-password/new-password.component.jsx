@@ -35,7 +35,7 @@ const NewPassword = ({
 
     axios
       .put(
-        `http://localhost:5000/api/users/${token}/${password1}`,
+        `${process.env.REACT_APP_URL}/api/users/${token}/${password1}`,
         {},
         {
           headers: {
