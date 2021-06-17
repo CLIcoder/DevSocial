@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import jsonwebtoken from "jsonwebtoken";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-const NewPassword = ({
-  match: {
-    params: { token },
-  },
-}) => {
+const NewPassword = () => {
+  const { token } = useParams();
+
   const history = useHistory();
   const [password, setPassword] = useState({
     password1: "",
@@ -47,6 +46,22 @@ const NewPassword = ({
       .then(() => history.push("/signin"))
       .catch((err) => console.log(err));
   };
+
+  useEffect(() => {
+    // verify token format to protect the route
+    const data = jsonwebtoken.verify(
+      token,
+      "XjJ6vvzIe6WvqAcJtU85FbwCKDZkw9sW",
+      (err, _) => {
+        // secure jwt and don't allow user to provide invalide token in localStorage
+        if (err) return false;
+
+        return true;
+      }
+    );
+    if (!data) history.push("/signin");
+    return;
+  }, []);
 
   return (
     <>

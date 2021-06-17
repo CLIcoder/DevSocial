@@ -89,7 +89,7 @@ route.post("/token", authenticateForget, (req, res) => {
         process.env.JWT_KEY
       );
 
-      const text = ` Click on the link to recover your password : ${process.env.CLIENT_URL}/${token}`;
+      const text = ` Click on the link to recover your password : ${process.env.CLIENT_URL}/#/new-password/${token}`;
       sendMail(email, "Devsocial Recover Password", text);
 
       return res.status(200).send("email sent to user for recovery");

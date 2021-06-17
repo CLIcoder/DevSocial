@@ -6,16 +6,18 @@ import { getUserData } from "../../utils/getUser-data";
 import Loader from "../laoder/loader.component";
 import "./discussion.css";
 
-const Discussion = () => {
-  //gettting params from url for data display
-  const customNameData = useParams();
-
+const Discussion = ({
+  match: {
+    params: { _id: idComment },
+  },
+}) => {
   const history = useHistory();
 
   const [userElem, setUserElem] = useState({});
   const [post, setPosting] = useState("");
   const [loader, setLoader] = useState(false);
   const [commentData, setCommentData] = useState([]);
+  const [customNameData, setCustomNameData] = useState({});
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -41,7 +43,7 @@ const Discussion = () => {
     }
     axios
       .post(
-        `${process.env.REACT_APP_URL}/api/posts/comment/${customNameData._id}`,
+        `${process.env.REACT_APP_URL}/api/posts/comment/${idComment}`,
         JSON.stringify({
           id: userElem.id,
           status: post,
@@ -68,21 +70,23 @@ const Discussion = () => {
     setUserElem({ image, _id, name });
 
     axios
-      .get(`${process.env.REACT_APP_URL}/api/posts/${customNameData._id}`, {
+      .get(`${process.env.REACT_APP_URL}/api/posts/${idComment}`, {
         headers: {
           authorisation: window.localStorage.getItem("authorisation"),
           "Content-Type": "application/json",
         },
       })
-      .then(({ data: { comments } }) => {
+      .then(({ data: { comments, image, content } }) => {
         setLoader(false);
         setCommentData([...comments]);
+        setCustomNameData((customNameData) => ({ ...customNameData, content }));
+        setCustomNameData((customNameData) => ({ ...customNameData, image }));
         return;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => history.push("/Dashboard"));
   };
 
-  useEffect(getData, [commentData.length]);
+  useEffect(getData, [commentData.length, idComment]);
   return (
     <section className="container">
       <a onClick={() => history.push("/posts")} className="btn btn-info margin">
@@ -91,16 +95,12 @@ const Discussion = () => {
       <div className="post bg-white p-1 my-1">
         <div>
           <a>
-            <img
-              className="round-img"
-              src={decodeURIComponent(customNameData.image)}
-              alt=""
-            />
+            <img className="round-img" src={customNameData.image} alt="" />
           </a>
         </div>
         <div>
           <h3>Posted by {userElem.name}</h3>
-          <p className="my-1">{decodeURIComponent(customNameData.content)}</p>
+          <p className="my-1">{customNameData.content}</p>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ const Discussion = () => {
         ) : (
           commentData.map(({ image, name, status, date }, indx) => {
             return (
-              <div key={Math.random() + indx}>
+              <div key={Math.random() + indx + Math.random()}>
                 <div className="post bg-white p-1 my-1">
                   <div>
                     <a href={`https://github.com/${image.split("/")[3]}`}>

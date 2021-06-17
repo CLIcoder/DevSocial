@@ -2,9 +2,9 @@
 export const signUpValidation = ({ name, email, password, password2 }) => {
   // Error object
   const error = {};
-  if (name.length < 2 || name.length > 30)
+  if (name.length < 2 || name.length > 100)
     error.name = "Please type a valide name";
-  if (!/\S+@\S+\.\S+/.test(email) || email.length > 30)
+  if (!/\S+@\S+\.\S+/.test(email) || email.length > 100)
     error.email = "Please type a valide mail";
   if (password !== password2) {
     error.password = "password does not match";

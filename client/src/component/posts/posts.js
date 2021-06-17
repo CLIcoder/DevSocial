@@ -211,14 +211,10 @@ const Posts = () => {
                           </button>
                           <div
                             onClick={() => {
-                              const encodedUrl_image =
-                                encodeURIComponent(image);
                               const encodedUrl_id = encodeURIComponent(_id);
-                              const encodedUrl_content =
-                                encodeURIComponent(content);
 
                               history.push({
-                                pathname: `/discussion/${encodedUrl_id}/${encodedUrl_content}/${encodedUrl_image}`,
+                                pathname: `/discussion/${encodedUrl_id}`,
                               });
                             }}
                             style={{

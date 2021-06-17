@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Switch, Redirect } from "react-router-dom";
+import { HashRouter, Switch, Redirect, Route } from "react-router-dom";
 
 //component
 import SignIn from "./component/auth/signin";
@@ -34,7 +34,11 @@ const App = () => {
         <NotLoggedIn path="/signup" component={SignUp} />
         <NotLoggedIn path="/signin" component={SignIn} />
         <NotLoggedIn path="/forget-password" component={ForgetPassword} />
-        <NotLoggedIn path="/new-password/:token" component={NewPassword} />
+        <NotLoggedIn
+          exact
+          path="/new-password/:token"
+          component={NewPassword}
+        />
 
         <LoggedIn path="/profile" component={CreateProfile} />
         <LoggedIn path="/education" component={CreateEducation} />
@@ -42,14 +46,10 @@ const App = () => {
         <LoggedIn path="/display-developers" component={DisplayProfile} />
         <LoggedIn path="/Dashboard" component={Dashboard} />
         <LoggedIn path="/posts" component={Posts} />
-        <LoggedIn
-          exact
-          path="/discussion/:_id/:content/:image"
-          component={Discussion}
-        />
+        <LoggedIn exact path="/discussion/:_id" component={Discussion} />
         <LoggedIn path="/developers" component={Profiles} />
 
-        <Redirect to="/Dashboard" />
+        <Redirect to="/" />
       </Switch>
       <Footer />
     </HashRouter>
