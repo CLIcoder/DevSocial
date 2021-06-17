@@ -76,11 +76,12 @@ const Discussion = ({
           "Content-Type": "application/json",
         },
       })
-      .then(({ data: { comments, image, content } }) => {
+      .then(({ data: { comments, image, content, name } }) => {
         setLoader(false);
         setCommentData([...comments]);
         setCustomNameData((customNameData) => ({ ...customNameData, content }));
         setCustomNameData((customNameData) => ({ ...customNameData, image }));
+        setCustomNameData((customNameData) => ({ ...customNameData, name }));
         return;
       })
       .catch((err) => history.push("/Dashboard"));
@@ -99,7 +100,7 @@ const Discussion = ({
           </a>
         </div>
         <div>
-          <h3>Posted by {userElem.name}</h3>
+          <h3>Posted by {customNameData.name}</h3>
           <p className="my-1">{customNameData.content}</p>
         </div>
       </div>

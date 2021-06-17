@@ -31,8 +31,8 @@ mongoose
 const port = process.env.PORT || 5000;
 
 //hello to api
-app.get("/", (req, res) => {
-  return res.status(200).send("hello to devsocial api");
+app.get("/docs", (req, res) => {
+  return res.status(200).send("<h1>Docs will be available soon</h1>");
 });
 
 //app listen connection stream
