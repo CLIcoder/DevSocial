@@ -22,6 +22,7 @@ export const countLikes = (arr) => {
   return counter;
 };
 
+//mail sender function
 export const sendMail = (email, subject, text) => {
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_PROVIDER,
