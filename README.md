@@ -56,7 +56,7 @@ Install client
 ```
 
 
-Install my-project with npm
+Install server
 
 ```bash 
   cd /backend
